@@ -11,6 +11,9 @@ public class Particle2D : MonoBehaviour
     // Step 2-1
     public float startingMass;
     float mass, massInv;
+    Vector2 vectorReflect;
+    Transform plane;
+    
     public void SetMass(float newMass)
     {
         //mass = newMass > 0.0f ? newMass : 0.0f;
@@ -71,6 +74,7 @@ public class Particle2D : MonoBehaviour
     void Start()
     {
         SetMass(startingMass);
+        //normal = cos(direction), sin(direction)
     }
 
     // Update is called once per frame
@@ -85,6 +89,11 @@ public class Particle2D : MonoBehaviour
 
         // Step 2-2
         UpdateAcceleration();
+        
+       
+
+
+
 
         // Apply to transform
         transform.position = position;
@@ -99,6 +108,16 @@ public class Particle2D : MonoBehaviour
         // f_gravity: f = mg
         //Vector2 f_gravity = mass * new Vector2(0.0f, -9.8f);
         //AddForce(f_gravity);
-        AddForce(ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up));
+        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
+        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
     }
+
+//    private void OnCollisionEnter(Collision collision)
+//    {
+//        
+//        //transform mat3
+//        vectorReflect = collision.transform.localToWorldMatrix.GetColumn(3);
+//        //vectorReflect = Vector3.Reflect(GetComponent<Rigidbody>().velocity, collision.contacts[0].normal);
+//    }
 }
