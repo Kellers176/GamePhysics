@@ -12,7 +12,16 @@ public class Particle2D : MonoBehaviour
     public float startingMass;
     float mass, massInv;
     Vector2 vectorReflect;
-    Transform plane;
+    Vector2 particleVelocity;
+    float frictionCoefficient;
+    Vector2 fluidVelocity;
+    float fluidDensity;
+    float objectArea_crossSection;
+    float objectDragCoefficient;
+    Vector2 anchorPosition;
+    Vector2 particlePosition;
+    float springRestingLength;
+    float springStiffnessCoefficient;
     
     public void SetMass(float newMass)
     {
@@ -74,12 +83,23 @@ public class Particle2D : MonoBehaviour
     void Start()
     {
         SetMass(startingMass);
+        particleVelocity = new Vector2(0.5f, 0);
+        frictionCoefficient = 0.5f;
+        vectorReflect = new Vector2(-Mathf.Sqrt(3)* 0.5f, 0.5f);
+        fluidVelocity = new Vector2(1, 0);
+        fluidDensity = 1.0f;
+        objectArea_crossSection = 3.0f;
+        objectDragCoefficient = 0.5f;
+        anchorPosition = new Vector2(0, 0);
+        springRestingLength = 2.0f;
+        springStiffnessCoefficient = 5.0f;
         //normal = cos(direction), sin(direction)
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //normal
         // Step 1-3
         // Integrate
         updatePositionExplicitEuler(Time.fixedDeltaTime);
@@ -91,12 +111,9 @@ public class Particle2D : MonoBehaviour
         UpdateAcceleration();
         
        
-
-
-
-
         // Apply to transform
         transform.position = position;
+        particlePosition = transform.position;
         // transform.Rotate(0, 0, rotation);
 
         // Step 1-4
@@ -110,14 +127,11 @@ public class Particle2D : MonoBehaviour
         //AddForce(f_gravity);
         Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
         Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
-        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
+//        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
+//        AddForce(ForceGenerator.GenerateForce_Friction_Static(normal, particleVelocity, frictionCoefficient));
+//        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
+//        AddForce(ForceGenerator.GenerateForce_drag(particleVelocity, fluidVelocity, fluidDensity, objectArea_crossSection, objectDragCoefficient));
+        AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
     }
 
-//    private void OnCollisionEnter(Collision collision)
-//    {
-//        
-//        //transform mat3
-//        vectorReflect = collision.transform.localToWorldMatrix.GetColumn(3);
-//        //vectorReflect = Vector3.Reflect(GetComponent<Rigidbody>().velocity, collision.contacts[0].normal);
-//    }
 }

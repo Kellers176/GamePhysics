@@ -14,7 +14,7 @@ public class ForceGenerator
     {
         // f_normal = proj(f_gravity, surfaceNormal_unit)
 
-        Vector2 f_normal = -Vector3.Project(f_gravity, surfaceNormal_unit);
+        Vector2 f_normal = f_gravity.magnitude * surfaceNormal_unit;
         return f_normal;
     }
     public static Vector2 GenerateForce_Sliding(Vector2 f_gravity, Vector2 f_normal)
@@ -63,7 +63,7 @@ public class ForceGenerator
     {
         // f_spring = -coeff*(spring length - spring resting length)
         Vector2 length = particlePosition - anchorPosition;
-        Vector2 f_spring = springStiffnessCoefficient * new Vector2((length.x - springRestingLength), (length.y - springRestingLength));
+        Vector2 f_spring = -springStiffnessCoefficient * new Vector2((length.x - springRestingLength), (length.y - springRestingLength));
         return f_spring;
     }
 
