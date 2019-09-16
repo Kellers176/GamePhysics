@@ -353,6 +353,7 @@ MonoBehaviour:
   angularVelocity: 0
   angularAcceleration: 0
   startingMass: 1
+  torque: 0
 --- !u!1 &919295776
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,13 @@ public class Particle2D : MonoBehaviour
     Vector2 particlePosition;
     float springRestingLength;
     float springStiffnessCoefficient;
+
+    //Step 3
+    float inertia;
+    public float torque;
+    Vector2 localCenterOfMass;
+    Vector2 worldCenterOfMass;
+    Vector2 appliedForce;
     
     public void SetMass(float newMass)
     {
@@ -79,6 +86,46 @@ public class Particle2D : MonoBehaviour
         angularVelocity += angularAcceleration * dt;
     }
 
+    //Step 3
+    void calculateBoxInertia()
+    {
+        // I = 1/12m(dx^2 + dy^2)
+        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+    }
+    void calculateDiskInertia()
+    {
+        // I = 1/12m(dx^2 + dy^2)
+        inertia = 0.5f * mass * ((transform.localScale.x * 0.5f) * (transform.localScale.x * 0.5f));
+    }
+    void calculateSquareInertia()
+    {
+        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+    }
+    void updateAngularAcceleration()
+    {
+        //converts torque to angular acceleration
+        //resets torque
+        // T = IA -> A = I^-1 * T
+        angularAcceleration = torque / inertia;
+        torque = inertia * angularAcceleration;
+    }
+
+    void applyTorque()
+    {
+        //applied torque: T = pf x F
+        //T is torque, pf is moment arm (point of applied force relative to center of mass), F is applied force at pf. 
+        //center of mass may not be the center of the object
+        //might help to add a separate member for center of mass in local and world space
+        //center of mass = 0;
+        //world = local object * transform of object matrix
+        localCenterOfMass = new Vector2(0, 0);
+//        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+
+        torque = Vector3.Cross(worldCenterOfMass, appliedForce).y;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,6 +140,9 @@ public class Particle2D : MonoBehaviour
         anchorPosition = new Vector2(0, 0);
         springRestingLength = 2.0f;
         springStiffnessCoefficient = 5.0f;
+
+        inertia = 0f;
+        appliedForce = new Vector2(1, 0);
         //normal = cos(direction), sin(direction)
     }
 
@@ -109,8 +159,31 @@ public class Particle2D : MonoBehaviour
 
         // Step 2-2
         UpdateAcceleration();
-        
+
        
+
+        if(gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
+        {
+            if(gameObject.transform.localScale.x == transform.localScale.y)
+            {
+                //we are cube
+                Debug.Log("This is a cube");
+                calculateSquareInertia();
+            }
+            else
+            {
+                Debug.Log("This is a box");
+                calculateBoxInertia();
+            }
+        }
+        else if(gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
+        {
+            Debug.Log("This is a sphere");
+            calculateDiskInertia();
+        }
+        applyTorque();
+        updateAngularAcceleration();
+
         // Apply to transform
         transform.position = position;
         particlePosition = transform.position;
@@ -121,17 +194,15 @@ public class Particle2D : MonoBehaviour
         // acceleration.x = -Mathf.Sin(Time.fixedTime);
         // angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
-        // Step 2-2
+        // Step 2-2 --------------------------------------------------------------------------------------------------------------------------------
         // f_gravity: f = mg
-        //Vector2 f_gravity = mass * new Vector2(0.0f, -9.8f);
-        //AddForce(f_gravity);
-        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
-        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
+//        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+//        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 //        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
 //        AddForce(ForceGenerator.GenerateForce_Friction_Static(normal, particleVelocity, frictionCoefficient));
 //        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
 //        AddForce(ForceGenerator.GenerateForce_drag(particleVelocity, fluidVelocity, fluidDensity, objectArea_crossSection, objectDragCoefficient));
-        AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
+//        AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
     }
 
 }
