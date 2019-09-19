@@ -24,7 +24,7 @@ public class Particle2D : MonoBehaviour
     float springStiffnessCoefficient;
 
     //Step 3
-    float inertia;
+    public float inertia;
     public float torque;
     Vector2 localCenterOfMass;
     Vector2 worldCenterOfMass;
@@ -90,16 +90,16 @@ public class Particle2D : MonoBehaviour
     void calculateBoxInertia()
     {
         // I = 1/12m(dx^2 + dy^2)
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1 / 12f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void calculateDiskInertia()
     {
         // I = 1/12m(dx^2 + dy^2)
         inertia = 0.5f * mass * ((transform.localScale.x * 0.5f) * (transform.localScale.x * 0.5f));
     }
-    void calculateSquareInertia()
+    void calculateCubeInertia()
     {
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1 / 6f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void updateAngularAcceleration()
     {
@@ -118,11 +118,13 @@ public class Particle2D : MonoBehaviour
         //might help to add a separate member for center of mass in local and world space
         //center of mass = 0;
         //world = local object * transform of object matrix
-        localCenterOfMass = new Vector2(0, 0);
+//        localCenterOfMass = transform.localPosition;
 //        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
-        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+//        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+        //obj.x * force.y - obj.y * force.x
+        torque += (transform.localPosition.x * appliedForce.y - transform.localPosition.y * appliedForce.x);
 
-        torque = Vector3.Cross(worldCenterOfMass, appliedForce).y;
+//        torque += Vector3.Cross(worldCenterOfMass, appliedForce).y;
     }
 
 
@@ -142,7 +144,7 @@ public class Particle2D : MonoBehaviour
         springStiffnessCoefficient = 5.0f;
 
         inertia = 0f;
-        appliedForce = new Vector2(1, 0);
+        appliedForce = new Vector2(6, 6);
         //normal = cos(direction), sin(direction)
     }
 
@@ -152,9 +154,9 @@ public class Particle2D : MonoBehaviour
         //normal
         // Step 1-3
         // Integrate
-        updatePositionExplicitEuler(Time.fixedDeltaTime);
+        //updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
-        //updateRotationEulerExplicit(Time.fixedDeltaTime);
+        updateRotationEulerExplicit(Time.fixedDeltaTime);
         //updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
@@ -168,7 +170,7 @@ public class Particle2D : MonoBehaviour
             {
                 //we are cube
                 Debug.Log("This is a cube");
-                calculateSquareInertia();
+                calculateCubeInertia();
             }
             else
             {
@@ -181,18 +183,21 @@ public class Particle2D : MonoBehaviour
             Debug.Log("This is a sphere");
             calculateDiskInertia();
         }
-        applyTorque();
         updateAngularAcceleration();
+        applyTorque();
 
         // Apply to transform
         transform.position = position;
         particlePosition = transform.position;
+
+
+        transform.Rotate(0,0,angularAcceleration);
         // transform.Rotate(0, 0, rotation);
 
         // Step 1-4
         // test
         // acceleration.x = -Mathf.Sin(Time.fixedTime);
-        // angularAcceleration = -Mathf.Sin(Time.fixedTime);
+        //angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
         // Step 2-2 --------------------------------------------------------------------------------------------------------------------------------
         // f_gravity: f = mg
