@@ -132,7 +132,8 @@ public class Particle2D : MonoBehaviour
         SetMass(startingMass);
         particleVelocity = new Vector2(0.5f, 0);
         frictionCoefficient = 0.5f;
-        vectorReflect = new Vector2(-Mathf.Sqrt(3)* 0.5f, 0.5f);
+        vectorReflect = new Vector2(-Mathf.Sqrt(3) * 0.5f, 0.5f);
+//        vectorReflect = new Vector2( Mathf.Sqrt(3) * 0.5f, 0.5f);
         fluidVelocity = new Vector2(1, 0);
         fluidDensity = 1.0f;
         objectArea_crossSection = 3.0f;
@@ -162,31 +163,31 @@ public class Particle2D : MonoBehaviour
 
        
 
-        if(gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
-        {
-            if(gameObject.transform.localScale.x == transform.localScale.y)
-            {
-                //we are cube
-                Debug.Log("This is a cube");
-                calculateSquareInertia();
-            }
-            else
-            {
-                Debug.Log("This is a box");
-                calculateBoxInertia();
-            }
-        }
-        else if(gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
-        {
-            Debug.Log("This is a sphere");
-            calculateDiskInertia();
-        }
-        applyTorque();
-        updateAngularAcceleration();
-
-        // Apply to transform
-        transform.position = position;
-        particlePosition = transform.position;
+//       if(gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
+//       {
+//           if(gameObject.transform.localScale.x == transform.localScale.y)
+//           {
+//               //we are cube
+//               Debug.Log("This is a cube");
+//               calculateSquareInertia();
+//           }
+//           else
+//           {
+//               Debug.Log("This is a box");
+//               calculateBoxInertia();
+//           }
+//       }
+//       else if(gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
+//       {
+//           Debug.Log("This is a sphere");
+//           calculateDiskInertia();
+//       }
+//       applyTorque();
+//       updateAngularAcceleration();
+//
+//       // Apply to transform
+       transform.position = position;
+       particlePosition = transform.position;
         // transform.Rotate(0, 0, rotation);
 
         // Step 1-4
@@ -196,13 +197,13 @@ public class Particle2D : MonoBehaviour
 
         // Step 2-2 --------------------------------------------------------------------------------------------------------------------------------
         // f_gravity: f = mg
-//        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
-//        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
+        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 //        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
 //        AddForce(ForceGenerator.GenerateForce_Friction_Static(normal, particleVelocity, frictionCoefficient));
-//        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
+        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
 //        AddForce(ForceGenerator.GenerateForce_drag(particleVelocity, fluidVelocity, fluidDensity, objectArea_crossSection, objectDragCoefficient));
-//        AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
+ //       AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
     }
 
 }
