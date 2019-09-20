@@ -15,7 +15,7 @@ public class ForceGenerator
         // f_normal = proj(f_gravity, surfaceNormal_unit)
 
  //       Vector2 f_normal =  f_gravity.magnitude * surfaceNormal_unit;
-        Vector2 f_normal = Vector3.Project(f_gravity, surfaceNormal_unit);
+        Vector2 f_normal = Vector3.Project(-f_gravity, surfaceNormal_unit);
         return f_normal;
     }
     public static Vector2 GenerateForce_Sliding(Vector2 f_gravity, Vector2 f_normal)
@@ -55,10 +55,14 @@ public class ForceGenerator
         //Vector2 u = 0.5f * mass * fluidVelocity * fluidVelocity;
         // f_drag = (p * u^2 * area * coeff)/2
         //-normalParticle(strengthofDrag*normalParticle + strength*normalParticle^2)
-//        Vector2 f_drag = (particleVelocity * u * u * objectArea_crossSection * objectDragCoefficient) * 0.5f;
-        Vector2 f_drag = -particleVelocity.normalized * (objectDragCoefficient * particleVelocity.normalized + objectDragCoefficient * particleVelocity.normalized * particleVelocity.normalized) ;
-        return f_drag;
+        //        Vector2 f_drag = (particleVelocity * u * u * objectArea_crossSection * objectDragCoefficient) * 0.5f;
+        //Vector2 f_drag = -particleVelocity.normalized * (objectDragCoefficient * particleVelocity.normalized + objectDragCoefficient * particleVelocity.normalized * particleVelocity.normalized) ;
+        Vector2 f_drag = new Vector2(0, 0);
+        Vector2 velocityDiff = particleVelocity - fluidVelocity;
+        float velocityDiffMag = velocityDiff.magnitude;
 
+        f_drag = objectDragCoefficient * (fluidDensity * (velocityDiff) * (velocityDiffMag) * 0.5f) * objectArea_crossSection;
+        return f_drag;
     }
 
     public static Vector2 GenerateForce_spring(Vector2 particlePosition, Vector2 anchorPosition, float springRestingLength, float springStiffnessCoefficient)
@@ -68,7 +72,8 @@ public class ForceGenerator
         float length = displacement.magnitude;
         //use hooks law
         //-springStiffnessCoefficient * displacement * length;
-        Vector2 f_spring = -springStiffnessCoefficient * new Vector2(length - springRestingLength, length - springRestingLength);
+        //Vector2 f_spring = -springStiffnessCoefficient * new Vector2(length - springRestingLength, length - springRestingLength);
+        Vector2 f_spring = displacement * springStiffnessCoefficient * (springRestingLength - length) / length;
         return f_spring;
     }
 
