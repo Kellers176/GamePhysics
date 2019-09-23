@@ -201,7 +201,7 @@ public class Particle2D : MonoBehaviour
         Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 //        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
 //        AddForce(ForceGenerator.GenerateForce_Friction_Static(normal, particleVelocity, frictionCoefficient));
-        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
+//        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
 //        AddForce(ForceGenerator.GenerateForce_drag(particleVelocity, fluidVelocity, fluidDensity, objectArea_crossSection, objectDragCoefficient));
  //       AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
     }
