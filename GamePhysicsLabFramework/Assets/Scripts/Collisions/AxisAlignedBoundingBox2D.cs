@@ -37,7 +37,7 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
     public override bool TestCollisionVsOBB(ObjectBoundingBox2D other)
     {
         // same as above twice
-        // first, text AABB vs max extents
+        // first, test AABB vs max extents
         //then, multiply by OBB inverse matrix, do text again
         // 1. .....
 

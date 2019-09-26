@@ -35,6 +35,15 @@ public class CircleCollisionHull2D : CollisionHull2D
         // 5. square sum
         // 6. DO THE TEST: distSq <= sumSq
 
+        Vector2 collisionCenter = other.transform.position;
+        Vector2 currentCenter = this.transform.position;
+
+        float difference = Vector2.Distance(collisionCenter, currentCenter);
+
+
+
+
+
         return false;
     }
 
