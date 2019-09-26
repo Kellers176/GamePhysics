@@ -38,11 +38,19 @@ public class CircleCollisionHull2D : CollisionHull2D
         Vector2 collisionCenter = other.transform.position;
         Vector2 currentCenter = this.transform.position;
 
-        float difference = Vector2.Distance(collisionCenter, currentCenter);
+        Vector2 difference = new Vector2(Vector2.Distance(collisionCenter, currentCenter), Vector2.Distance(collisionCenter, currentCenter));
 
+        //I am confused
+        float distanceSquared = Vector2.SqrMagnitude(difference);
 
+        float sumOfRadii = other.radius + this.radius;
 
+        float sumSquared = sumOfRadii * sumOfRadii;
 
+        if(distanceSquared <= sumSquared)
+        {
+            return true;
+        }
 
         return false;
     }
@@ -51,7 +59,8 @@ public class CircleCollisionHull2D : CollisionHull2D
     {
         // calculate closest point by clamping circle center on each dimension
         // passes if closest point vs circle passes
-        // 1. .....
+        // 1. get the radius of the circle
+        // 2. get the ymin, ymax
 
 
         return false;
