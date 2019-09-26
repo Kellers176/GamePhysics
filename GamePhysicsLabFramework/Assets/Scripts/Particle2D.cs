@@ -25,10 +25,9 @@ public class Particle2D : MonoBehaviour
 
     //Step 3
     public float inertia;
+    public float inverseInertia;
     public float torque;
-    Vector2 localCenterOfMass;
-    Vector2 worldCenterOfMass;
-    Vector2 appliedForce;
+    public Vector2 appliedForce;
     
     public void SetMass(float newMass)
     {
@@ -106,11 +105,11 @@ public class Particle2D : MonoBehaviour
         //converts torque to angular acceleration
         //resets torque
         // T = IA -> A = I^-1 * T
-        angularAcceleration = torque / inertia;
-        torque = inertia * angularAcceleration;
+        angularAcceleration = torque * inverseInertia;
+ //       torque = inertia * angularAcceleration;
     }
 
-    void applyTorque()
+    void applyTorque(Vector2 force, Vector2 pointOfForce)
     {
         //applied torque: T = pf x F
         //T is torque, pf is moment arm (point of applied force relative to center of mass), F is applied force at pf. 
@@ -118,12 +117,13 @@ public class Particle2D : MonoBehaviour
         //might help to add a separate member for center of mass in local and world space
         //center of mass = 0;
         //world = local object * transform of object matrix
-//        localCenterOfMass = transform.localPosition;
-//        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
-//        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+        //        localCenterOfMass = transform.localPosition;
+        //        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        //        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
         //obj.x * force.y - obj.y * force.x
-        torque += (transform.localPosition.x * appliedForce.y - transform.localPosition.y * appliedForce.x);
+        Vector2 momentArm = pointOfForce - position;
 
+        torque += (momentArm.x * force.y - momentArm.y * force.x);
 //        torque += Vector3.Cross(worldCenterOfMass, appliedForce).y;
     }
 
@@ -144,7 +144,8 @@ public class Particle2D : MonoBehaviour
         springStiffnessCoefficient = 5.0f;
 
         inertia = 0f;
-        appliedForce = new Vector2(6, 6);
+        
+        appliedForce = new Vector2(2, 2);
         //normal = cos(direction), sin(direction)
     }
 
@@ -162,11 +163,10 @@ public class Particle2D : MonoBehaviour
         // Step 2-2
         UpdateAcceleration();
 
-       
 
-        if(gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
+        if (gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
         {
-            if(gameObject.transform.localScale.x == transform.localScale.y)
+            if (gameObject.transform.localScale.x == transform.localScale.y)
             {
                 //we are cube
                 Debug.Log("This is a cube");
@@ -178,13 +178,15 @@ public class Particle2D : MonoBehaviour
                 calculateBoxInertia();
             }
         }
-        else if(gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
+        else if (gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
         {
             Debug.Log("This is a sphere");
             calculateDiskInertia();
         }
+        inverseInertia = 1 / inertia;
+
+        applyTorque(new Vector2(5,3), appliedForce);
         updateAngularAcceleration();
-        applyTorque();
 
         // Apply to transform
         transform.position = position;

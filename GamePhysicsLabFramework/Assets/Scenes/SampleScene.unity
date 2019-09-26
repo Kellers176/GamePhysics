@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73f5b077e2e45c240862add2cbac35d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 2, y: 2}
+  position: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
   acceleration: {x: 0, y: 0}
   rotation: 0
@@ -281,7 +281,9 @@ MonoBehaviour:
   angularAcceleration: 0
   startingMass: 5
   inertia: 0
+  inverseInertia: 0
   torque: 0
+  appliedForce: {x: 0, y: 0}
 --- !u!135 &788758737
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -349,7 +351,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788758735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.0428107, y: 2.12, z: 11.1701765}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -374,7 +376,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &916217863
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -443,7 +445,7 @@ Transform:
   m_GameObject: {fileID: 916217862}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.18, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.764875, y: 1.01, z: 1.01}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -468,7 +470,9 @@ MonoBehaviour:
   angularAcceleration: 0
   startingMass: 5
   inertia: 0
+  inverseInertia: 0
   torque: 0
+  appliedForce: {x: 0, y: 0}
 --- !u!1 &919295776
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +727,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1977153082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,7 +748,9 @@ MonoBehaviour:
   angularAcceleration: 0
   startingMass: 2
   inertia: 0
+  inverseInertia: 0
   torque: 0
+  appliedForce: {x: 0, y: 0}
 --- !u!65 &1977153083
 BoxCollider:
   m_ObjectHideFlags: 0
