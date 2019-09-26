@@ -38,7 +38,7 @@ public class CircleCollisionHull2D : CollisionHull2D
         Vector2 collisionCenter = other.transform.position;
         Vector2 currentCenter = this.transform.position;
 
-        Vector2 difference = new Vector2(Vector2.Distance(collisionCenter, currentCenter), Vector2.Distance(collisionCenter, currentCenter));
+        Vector2 difference = collisionCenter - currentCenter;
 
         //I am confused
         float distanceSquared = Vector2.SqrMagnitude(difference);
@@ -61,6 +61,28 @@ public class CircleCollisionHull2D : CollisionHull2D
         // passes if closest point vs circle passes
         // 1. get the radius of the circle
         // 2. get the ymin, ymax
+        // 3. get the xmin, xmax
+        // 4. max0 >= radius
+        // 5. radius >= min0
+
+        float radius = this.radius;
+
+        float minY = other.transform.position.y - (other.transform.localScale.y * 0.5f);
+        float maxY = other.transform.position.y + (other.transform.localScale.y * 0.5f);
+
+        float minX = other.transform.position.x - (other.transform.localScale.x * 0.5f);
+        float maxX = other.transform.position.x + (other.transform.localScale.x * 0.5f);
+
+        float nearestX = this.transform.position.x * Mathf.Clamp(radius, minX, maxX);
+        float nearestY = this.transform.position.y * Mathf.Clamp(radius, minY, maxY);
+
+        if (nearestX >= radius && radius >= nearestY)
+        {
+
+        }
+
+
+
 
 
         return false;
