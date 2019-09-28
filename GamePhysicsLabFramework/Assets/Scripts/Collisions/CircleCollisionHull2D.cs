@@ -62,8 +62,9 @@ public class CircleCollisionHull2D : CollisionHull2D
         // 1. get the radius of the circle
         // 2. get the ymin, ymax
         // 3. get the xmin, xmax
-        // 4. max0 >= radius
-        // 5. radius >= min0
+        // 4. clamp the circle to the box so that we are able to get proper collision
+        // 5. max0 >= radius
+        // 6. radius >= min0
 
         float radius = this.radius;
 
@@ -78,12 +79,8 @@ public class CircleCollisionHull2D : CollisionHull2D
 
         if (nearestX >= radius && radius >= nearestY)
         {
-
+            return true;
         }
-
-
-
-
 
         return false;
     }
@@ -92,7 +89,21 @@ public class CircleCollisionHull2D : CollisionHull2D
     {
         // same as above, but first....
         // transform circle position by multiplying by box world matrix inverse
-        // 1. .....
+        // 1. get the radius of the circle
+        // get the min and max of the box
+        // create matrix for r and u (normal calculation)
+        // | cos(theta)     sin(theta) |
+        // |-sin(theta)    cos(theta)  |
+        // r = (+cos(theta), +sin(theta))
+        // u = (-sin(theta),  cos(theta))
+        // Step1: Project all vertices onto normal
+        // p^1 (box) = (p(circle) * normal) * normal
+        // Step 2: AABB test
+        //repeat both steps for each of the normals
+
+
+
+
 
         return false;
     }

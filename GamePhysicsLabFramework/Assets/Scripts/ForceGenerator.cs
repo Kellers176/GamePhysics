@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ForceGenerator
 {
+
+    
+
+    
     public static Vector2 GenerateForce_Gravity(float particleMass, float gravitationalConstant, Vector2 worldUp)
     {
         // f = mg

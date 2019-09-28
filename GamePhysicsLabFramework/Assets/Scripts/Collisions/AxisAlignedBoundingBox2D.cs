@@ -20,7 +20,14 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
 
     public override bool TestCollisionVsCircle(CircleCollisionHull2D other)
     {
-        // see circle
+        // pass if distance between centers <= sum of radii
+        // optimized collision passes if (distance between centers) squared <= (sum of radii) sq
+        // 1. get the two centers
+        // 2. difference between centers
+        // 3. distance squared = dot(diff, diff) (Vector.squaremagnitude)
+        // 4. sum of radii
+        // 5. square sum
+        // 6. DO THE TEST: distSq <= sumSq
 
         return false;
     }
