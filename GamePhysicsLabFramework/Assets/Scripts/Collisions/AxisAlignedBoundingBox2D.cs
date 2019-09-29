@@ -66,7 +66,13 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         float minX2 = other.transform.position.x - (other.transform.localScale.x * 0.5f);
         float maxX2 = other.transform.position.x + (other.transform.localScale.x * 0.5f);
 
-
+        if (maxX1 >= minX2 && maxY1 >= minY2)
+        {
+            if (maxX2 >= minX1 && maxY2 >= minY1)
+            {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -79,7 +85,22 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         // 1. get the ymin, ymax, xmin, xmax of both boxes
         // 2. max of box 1 >= min of box 2
         // 3. max of box 2 >= min of box 1
-        // 4. 
+        // 4. create OBB inverse matrix
+        // 5. multiply inverse matrix by max extents
+        // 6. max of box 1 >= min of box 2
+        // 7. max of box 2 >= min of box 1
+
+        float minY1 = this.transform.position.y - (this.transform.localScale.y * 0.5f);
+        float maxY1 = this.transform.position.y + (this.transform.localScale.y * 0.5f);
+        float minX1 = this.transform.position.x - (this.transform.localScale.x * 0.5f);
+        float maxX1 = this.transform.position.x + (this.transform.localScale.x * 0.5f);
+
+        float minY2 = other.transform.position.y - (other.transform.localScale.y * 0.5f);
+        float maxY2 = other.transform.position.y + (other.transform.localScale.y * 0.5f);
+        float minX2 = other.transform.position.x - (other.transform.localScale.x * 0.5f);
+        float maxX2 = other.transform.position.x + (other.transform.localScale.x * 0.5f);
+
+
 
         return false;
     }
