@@ -100,7 +100,7 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         float minX2 = other.transform.position.x - (other.transform.localScale.x * 0.5f);
         float maxX2 = other.transform.position.x + (other.transform.localScale.x * 0.5f);
 
-
+         
 
         return false;
     }
