@@ -74,10 +74,26 @@ public class CircleCollisionHull2D : CollisionHull2D
         float minX = other.transform.position.x - (other.transform.localScale.x * 0.5f);
         float maxX = other.transform.position.x + (other.transform.localScale.x * 0.5f);
 
-        float nearestX = this.transform.position.x * Mathf.Clamp(radius, minX, maxX);
-        float nearestY = this.transform.position.y * Mathf.Clamp(radius, minY, maxY);
+        float nearestX = Mathf.Clamp(this.transform.position.x, minX, maxX);
+        float nearestY = Mathf.Clamp(this.transform.position.y, minY, maxY);
 
-        if (nearestX >= radius && radius >= nearestY)
+
+        //check whether point is within circle
+        if (TestPoint(radius, nearestX, nearestY, this.transform.position)) 
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool TestPoint(float radius, float nearX, float nearY, Vector2 centerCircle)
+    {
+        //(xp,yp) = (nearX, nearY)
+        // (xc,yc) = (circleCenter.x, circleCenter.y)
+        float distance = Mathf.Sqrt(((nearX - centerCircle.x) * (nearX - centerCircle.x)) + ((nearY - centerCircle.y) * (nearY - centerCircle.y)));
+
+        if(distance < radius)
         {
             return true;
         }
@@ -101,10 +117,35 @@ public class CircleCollisionHull2D : CollisionHull2D
         // Step 2: AABB test
         //repeat both steps for each of the normals
 
+        float radius = this.radius;
+
+        float minY = other.transform.position.y - (other.transform.localScale.y * 0.5f);
+        float maxY = other.transform.position.y + (other.transform.localScale.y * 0.5f);
+
+        float minX = other.transform.position.x - (other.transform.localScale.x * 0.5f);
+        float maxX = other.transform.position.x + (other.transform.localScale.x * 0.5f);
+
+        
+        //do stuff
+        //multiply by the inverse matrix
+
+        Vector3 position;
 
 
+        position = other.transform.worldToLocalMatrix.MultiplyVector(this.transform.position);
 
+        float nearestX = Mathf.Clamp(position.x, minX, maxX);
+        float nearestY = Mathf.Clamp(position.y, minY, maxY);
+
+
+        //check whether point is within circle
+        if (TestPoint(radius, nearestX, nearestY, position))
+        {
+            return true;
+        }
 
         return false;
+
+
     }
 }

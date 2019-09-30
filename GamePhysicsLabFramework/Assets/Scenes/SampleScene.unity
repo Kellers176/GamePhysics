@@ -717,12 +717,12 @@ GameObject:
   - component: {fileID: 1471214511}
   - component: {fileID: 1471214510}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CubePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1471214510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,7 +843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1502186283
 MonoBehaviour:
   m_ObjectHideFlags: 0
