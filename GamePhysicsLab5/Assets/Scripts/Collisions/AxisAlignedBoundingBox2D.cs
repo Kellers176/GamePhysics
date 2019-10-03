@@ -18,7 +18,7 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
 
     }
 
-    public override bool TestCollisionVsCircle(CircleCollisionHull2D other)
+    public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c)
     {
         //works
         // calculate closest point by clamping circle center on each dimension
@@ -63,7 +63,7 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other, ref Collision c)
     {
         //works
         // for each dimension, max extent of A greater than min extent of B
@@ -107,7 +107,7 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other, ref Collision c)
     {
         // same as above twice
         // first, test AABB vs max extents

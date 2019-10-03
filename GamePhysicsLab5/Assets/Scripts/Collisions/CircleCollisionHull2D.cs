@@ -24,7 +24,7 @@ public class CircleCollisionHull2D : CollisionHull2D
     }
 
 
-    public override bool TestCollisionVsCircle(CircleCollisionHull2D other)
+    public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c)
     {
         //works
         // pass if distance between centers <= sum of radii
@@ -36,6 +36,7 @@ public class CircleCollisionHull2D : CollisionHull2D
         // 5. square sum
         // 6. DO THE TEST: distSq <= sumSq
 
+       
         Vector2 collisionCenter = other.transform.position;
         Vector2 currentCenter = this.transform.position;
 
@@ -56,7 +57,7 @@ public class CircleCollisionHull2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other, ref Collision c)
     {
         //works
         // calculate closest point by clamping circle center on each dimension
@@ -103,9 +104,8 @@ public class CircleCollisionHull2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other, ref Collision c)
     {
-
         //done
         // same as above, but first....
         // transform circle position by multiplying by box world matrix inverse
@@ -120,6 +120,8 @@ public class CircleCollisionHull2D : CollisionHull2D
         // p^1 (box) = (p(circle) * normal) * normal
         // Step 2: AABB test
         //repeat both steps for each of the normals
+        
+
 
         float radius = this.radius;
 

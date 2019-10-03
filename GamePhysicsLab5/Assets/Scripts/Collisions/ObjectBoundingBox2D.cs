@@ -17,7 +17,7 @@ public class ObjectBoundingBox2D : CollisionHull2D
     {
         
     }
-    public override bool TestCollisionVsCircle(CircleCollisionHull2D other)
+    public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c)
     {
         //done
         // same as above, but first....
@@ -33,6 +33,8 @@ public class ObjectBoundingBox2D : CollisionHull2D
         // p^1 (box) = (p(circle) * normal) * normal
         // Step 2: AABB test
         //repeat both steps for each of the normals
+
+
 
         float radius = other.radius;
 
@@ -85,7 +87,7 @@ public class ObjectBoundingBox2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other, ref Collision c)
     {
         //done
         // same as above twice
@@ -150,7 +152,7 @@ public class ObjectBoundingBox2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBox2D other, ref Collision c)
     {
         // AABB-OBB part 2 twice
         // 1. .....

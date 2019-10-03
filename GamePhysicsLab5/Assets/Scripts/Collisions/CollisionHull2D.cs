@@ -4,6 +4,24 @@ using UnityEngine;
 
 public abstract class CollisionHull2D : MonoBehaviour
 {
+    public class Collision
+    {
+        public struct Contact
+        {
+            public Vector2 point;
+            public Vector2 normal;
+            public float restitution;
+            public float collisionDepth;
+        }
+
+        public CollisionHull2D a = null, b = null;
+        public Contact[] contact = new Contact[4];
+        public int contactCount = 0;
+        public bool status = false;
+
+        Vector2 closingVelocity;
+    }
+
 
     public enum CollisionHullType2D
     {
@@ -33,16 +51,16 @@ public abstract class CollisionHull2D : MonoBehaviour
         
     }
 
-    public static bool TestCollision(CollisionHull2D a, CollisionHull2D b)
+    public static bool TestCollision(CollisionHull2D a, CollisionHull2D b, ref Collision c)
     {
         return false;
     }
 
 
-    public abstract bool TestCollisionVsCircle(CircleCollisionHull2D other);
+    public abstract bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c);
 
-    public abstract bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other);
+    public abstract bool TestCollisionVsAABB(AxisAlignedBoundingBox2D other, ref Collision c);
 
-    public abstract bool TestCollisionVsOBB(ObjectBoundingBox2D other);
+    public abstract bool TestCollisionVsOBB(ObjectBoundingBox2D other, ref Collision c);
 
 }
