@@ -12,14 +12,28 @@ public abstract class CollisionHull2D : MonoBehaviour
             public Vector2 normal;
             public float restitution;
             public float collisionDepth;
+
+            public Vector3 velocity;
+            //public float inverseMass;
+            //public float interpenetration;
         }
 
         public CollisionHull2D a = null, b = null;
+        //contact points on an object
+
+
         public Contact[] contact = new Contact[4];
         public int contactCount = 0;
         public bool status = false;
 
         Vector2 closingVelocity;
+
+        // Find if the two objects have collided
+        // Generate normal and get velocity from object that collided if true
+        // Push out object by difference between max1 and min2
+        // Send the colliding object in the direction of the normal at the same velocity
+
+
     }
 
 
