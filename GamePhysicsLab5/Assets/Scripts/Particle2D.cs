@@ -42,7 +42,7 @@ public class Particle2D : MonoBehaviour
     }
 
     // Step 2-2
-    Vector2 force;
+    public Vector2 force;
     public void AddForce(Vector2 newForce)
     {
         // D'Alembert
@@ -90,7 +90,7 @@ public class Particle2D : MonoBehaviour
     void calculateBoxInertia()
     {
         // I = 1/12m(dx^2 + dy^2)
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1 / 12f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void calculateDiskInertia()
     {
@@ -143,7 +143,6 @@ public class Particle2D : MonoBehaviour
         springStiffnessCoefficient = 5.0f;
 
         inertia = 0f;
-        appliedForce = new Vector2(1, 0);
         //normal = cos(direction), sin(direction)
     }
 
@@ -155,7 +154,7 @@ public class Particle2D : MonoBehaviour
         // Integrate
         updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
-        //updateRotationEulerExplicit(Time.fixedDeltaTime);
+        updateRotationEulerExplicit(Time.fixedDeltaTime);
         //updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
@@ -188,13 +187,41 @@ public class Particle2D : MonoBehaviour
 //       // Apply to transform
        transform.position = position;
        particlePosition = transform.position;
-        // transform.Rotate(0, 0, rotation);
-
+       
+        calculateBoxInertia();
         // Step 1-4
         // test
         // acceleration.x = -Mathf.Sin(Time.fixedTime);
         // angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            //move up
+            acceleration.y = 5;
+        }
+        else if(Input.GetKey(KeyCode.DownArrow))
+        {
+            //movedown
+            acceleration.y = -5;
+        }
+        else
+        {
+            acceleration.y = 0;
+        }
+        if(Input.GetKey(KeyCode.RightArrow))
+        {
+            //rotate right
+        }
+        else if(Input.GetKey(KeyCode.LeftArrow))
+        {
+            //rotate left
+            appliedForce = new Vector2(1, 0);
+            applyTorque();
+            updateAngularAcceleration();
+
+        }
+        transform.Rotate(0, 0, rotation);
+        
         // Step 2-2 --------------------------------------------------------------------------------------------------------------------------------
         // f_gravity: f = mg
         Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
