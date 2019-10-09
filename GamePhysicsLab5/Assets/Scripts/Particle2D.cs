@@ -8,6 +8,8 @@ public class Particle2D : MonoBehaviour
     public Vector2 position, velocity, acceleration;
     public float rotation, angularVelocity, angularAcceleration;
 
+    public float speed;
+
     // Step 2-1
     public float startingMass;
     float mass, massInv;
@@ -126,6 +128,8 @@ public class Particle2D : MonoBehaviour
         Vector2 momentArm = pointOfForce - position;
 
         torque += (momentArm.x * force.y - momentArm.y * force.x);
+
+        // += (force.x * (momentArm - new Vector2(0,0)).magnitude);
         //        torque += Vector3.Cross(worldCenterOfMass, appliedForce).y;
     }
 
@@ -143,6 +147,8 @@ public class Particle2D : MonoBehaviour
         anchorPosition = new Vector2(0, 0);
         springRestingLength = 2.0f;
         springStiffnessCoefficient = 5.0f;
+
+        speed = 50f;
 
         inertia = 0f;
         appliedForce = new Vector2(6, 6);
@@ -162,39 +168,20 @@ public class Particle2D : MonoBehaviour
         // Step 2-2
         UpdateAcceleration();
        
-//       calculateBoxInertia();
-       // Step 1-4
-       // test
-       // acceleration.x = -Mathf.Sin(Time.fixedTime);
-       // angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
        if (Input.GetKey(KeyCode.UpArrow))
        {
-           //move up
-           //this needs to change
-           acceleration.y = 5;
-           //if(pressingLeft)
-           //{
-           //    acceleration.x -= 2f;
-           //}
-           //else if(pressingRight)
-           //{
-           //    acceleration.x += 2f;
-           //}
-       }
+            //move up
+            Vector2 force = transform.rotation * Vector3.up * speed * Time.fixedDeltaTime;
+            AddForce(force);
+            //position += force;
+        }
        else if(Input.GetKey(KeyCode.DownArrow))
        {
-           //movedown
-           //this also needs to change
-           acceleration.y = -5;
-           //if (pressingLeft)
-           //{
-           //    acceleration.x -= 2f;
-           //}
-           //else if (pressingRight)
-           //{
-           //    acceleration.x += 2f;
-           //}
+            //movedown
+            Vector2 force = transform.rotation * -Vector3.up * speed * Time.fixedDeltaTime;
+            AddForce(force);
+            //position += force;
         }
        else
        {
@@ -203,56 +190,58 @@ public class Particle2D : MonoBehaviour
        if(Input.GetKey(KeyCode.RightArrow))
        {
             //rotate right
-            angularAcceleration -= 0.01f;
-            acceleration.x += 2f;
+            //angularAcceleration -= 0.01f;
             if (angularAcceleration < -3.14)
             {
                 angularAcceleration = -3.14f;
-
+            
             }
-            pressingLeft = false;
-            pressingRight = true;
-            //calculateBoxInertia();
-            //inverseInertia = 1 / inertia;
-            //
-            //applyTorque(new Vector2(0.1f, 0), appliedForce);
-            //updateAngularAcceleration();
+            calculateBoxInertia();
+            inverseInertia = 1 / inertia;
+            
+            applyTorque(new Vector2(0.01f, 0), appliedForce);
+            updateAngularAcceleration();
         }
        else if(Input.GetKey(KeyCode.LeftArrow))
        {
             //rotate left
-            angularAcceleration += 0.01f;
-            acceleration.x -= 2f;
-
+            //angularAcceleration += 0.01f;
+            //
             if (angularAcceleration > 3.14)
             {
                 angularAcceleration = 3.14f;
-
+            
             }
-            pressingLeft = true;
-            pressingRight = false;
-            //calculateBoxInertia();
-            //inverseInertia = 1 / inertia;
-            //
-            //applyTorque(new Vector2(-0.1f, 0), appliedForce);
-            //updateAngularAcceleration();
+            calculateBoxInertia();
+            inverseInertia = 1 / inertia;
+            
+            applyTorque(new Vector2(-0.01f, 0), appliedForce);
+            updateAngularAcceleration();
 
         }
-       else
+        
+
+       if(transform.position.y < -1.5f)
+       {
+          position.y = 11;
+       }
+       if(transform.position.y > 11)
+       {
+            position.y = -1.5f;
+       }
+        if (transform.position.x < -11)
         {
-            //pressingLeft = false;
-            //pressingRight = false;
+            position.x = 11;
         }
-
-
-        //       // Apply to transform
+        if (transform.position.x > 11)
+        {
+            position.x = -11;
+        }
+        // Apply to transform
         transform.position = position;
         particlePosition = transform.position;
-//
-//
-       transform.Rotate(0, 0, angularAcceleration);
- //       transform.Rotate(0, 0, rotation);
-        
+
+        transform.Rotate(0, 0, angularAcceleration);
 
     }
 
