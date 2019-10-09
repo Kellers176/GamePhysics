@@ -25,10 +25,11 @@ public class Particle2D : MonoBehaviour
 
     //Step 3
     float inertia;
+    public float inverseInertia;
     public float torque;
-    Vector2 localCenterOfMass;
-    Vector2 worldCenterOfMass;
     Vector2 appliedForce;
+    bool pressingLeft = false;
+    bool pressingRight = false;
 
     public void SetMass(float newMass)
     {
@@ -106,11 +107,11 @@ public class Particle2D : MonoBehaviour
         //converts torque to angular acceleration
         //resets torque
         // T = IA -> A = I^-1 * T
-        angularAcceleration = torque / inertia;
-        torque = inertia * angularAcceleration;
+        angularAcceleration = torque * inverseInertia;
+        //       torque = inertia * angularAcceleration;
     }
 
-    void applyTorque()
+    void applyTorque(Vector2 force, Vector2 pointOfForce)
     {
         //applied torque: T = pf x F
         //T is torque, pf is moment arm (point of applied force relative to center of mass), F is applied force at pf. 
@@ -122,11 +123,11 @@ public class Particle2D : MonoBehaviour
         //        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
         //        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
         //obj.x * force.y - obj.y * force.x
-        torque += (transform.localPosition.x * appliedForce.y - transform.localPosition.y * appliedForce.x);
+        Vector2 momentArm = pointOfForce - position;
 
+        torque += (momentArm.x * force.y - momentArm.y * force.x);
         //        torque += Vector3.Cross(worldCenterOfMass, appliedForce).y;
     }
-
 
     // Start is called before the first frame update
     void Start()
@@ -159,7 +160,7 @@ public class Particle2D : MonoBehaviour
         //updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
-//        UpdateAcceleration();
+        UpdateAcceleration();
        
 //       calculateBoxInertia();
        // Step 1-4
@@ -170,58 +171,86 @@ public class Particle2D : MonoBehaviour
        if (Input.GetKey(KeyCode.UpArrow))
        {
            //move up
+           //this needs to change
            acceleration.y = 5;
+           //if(pressingLeft)
+           //{
+           //    acceleration.x -= 2f;
+           //}
+           //else if(pressingRight)
+           //{
+           //    acceleration.x += 2f;
+           //}
        }
        else if(Input.GetKey(KeyCode.DownArrow))
        {
            //movedown
+           //this also needs to change
            acceleration.y = -5;
-       }
+           //if (pressingLeft)
+           //{
+           //    acceleration.x -= 2f;
+           //}
+           //else if (pressingRight)
+           //{
+           //    acceleration.x += 2f;
+           //}
+        }
        else
        {
            acceleration.y = 0;
        }
        if(Input.GetKey(KeyCode.RightArrow))
        {
-           //rotate right
-       }
+            //rotate right
+            angularAcceleration -= 0.01f;
+            acceleration.x += 2f;
+            if (angularAcceleration < -3.14)
+            {
+                angularAcceleration = -3.14f;
+
+            }
+            pressingLeft = false;
+            pressingRight = true;
+            //calculateBoxInertia();
+            //inverseInertia = 1 / inertia;
+            //
+            //applyTorque(new Vector2(0.1f, 0), appliedForce);
+            //updateAngularAcceleration();
+        }
        else if(Input.GetKey(KeyCode.LeftArrow))
        {
-           //rotate left
-           appliedForce = new Vector2(1, 0);
-           applyTorque();
-           updateAngularAcceleration();
+            //rotate left
+            angularAcceleration += 0.01f;
+            acceleration.x -= 2f;
 
-       }
+            if (angularAcceleration > 3.14)
+            {
+                angularAcceleration = 3.14f;
 
-//       if (gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
-//       {
-//           if (gameObject.transform.localScale.x == transform.localScale.y)
-//           {
-//               //we are cube
-//               Debug.Log("This is a cube");
-//               calculateCubeInertia();
-//           }
-//           else
-//           {
-//               Debug.Log("This is a box");
-//               calculateBoxInertia();
-//           }
-//       }
-//       else if (gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
-//       {
-//           Debug.Log("This is a sphere");
-//           calculateDiskInertia();
-//       }
-//       updateAngularAcceleration();
-//       applyTorque();
-//
-//       // Apply to transform
+            }
+            pressingLeft = true;
+            pressingRight = false;
+            //calculateBoxInertia();
+            //inverseInertia = 1 / inertia;
+            //
+            //applyTorque(new Vector2(-0.1f, 0), appliedForce);
+            //updateAngularAcceleration();
+
+        }
+       else
+        {
+            //pressingLeft = false;
+            //pressingRight = false;
+        }
+
+
+        //       // Apply to transform
         transform.position = position;
         particlePosition = transform.position;
 //
 //
-//       transform.Rotate(0, 0, angularAcceleration);
+       transform.Rotate(0, 0, angularAcceleration);
  //       transform.Rotate(0, 0, rotation);
         
 

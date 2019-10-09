@@ -159,6 +159,7 @@ MonoBehaviour:
   angularVelocity: 0
   angularAcceleration: 0
   startingMass: 6
+  inverseInertia: 0
   torque: 0
 --- !u!65 &18798604
 BoxCollider:
@@ -227,8 +228,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18798602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.09}
+  m_LocalScale: {x: 1, y: 2.6968, z: 0.20572}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
