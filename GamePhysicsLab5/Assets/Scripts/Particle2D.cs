@@ -29,7 +29,7 @@ public class Particle2D : MonoBehaviour
     Vector2 localCenterOfMass;
     Vector2 worldCenterOfMass;
     Vector2 appliedForce;
-    
+
     public void SetMass(float newMass)
     {
         //mass = newMass > 0.0f ? newMass : 0.0f;
@@ -42,7 +42,7 @@ public class Particle2D : MonoBehaviour
     }
 
     // Step 2-2
-    public Vector2 force;
+    Vector2 force;
     public void AddForce(Vector2 newForce)
     {
         // D'Alembert
@@ -97,9 +97,9 @@ public class Particle2D : MonoBehaviour
         // I = 1/12m(dx^2 + dy^2)
         inertia = 0.5f * mass * ((transform.localScale.x * 0.5f) * (transform.localScale.x * 0.5f));
     }
-    void calculateSquareInertia()
+    void calculateCubeInertia()
     {
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1 / 6f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void updateAngularAcceleration()
     {
@@ -118,11 +118,13 @@ public class Particle2D : MonoBehaviour
         //might help to add a separate member for center of mass in local and world space
         //center of mass = 0;
         //world = local object * transform of object matrix
-        localCenterOfMass = new Vector2(0, 0);
-//        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
-        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+        //        localCenterOfMass = transform.localPosition;
+        //        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        //        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+        //obj.x * force.y - obj.y * force.x
+        torque += (transform.localPosition.x * appliedForce.y - transform.localPosition.y * appliedForce.x);
 
-        torque = Vector3.Cross(worldCenterOfMass, appliedForce).y;
+        //        torque += Vector3.Cross(worldCenterOfMass, appliedForce).y;
     }
 
 
@@ -133,7 +135,6 @@ public class Particle2D : MonoBehaviour
         particleVelocity = new Vector2(0.5f, 0);
         frictionCoefficient = 0.5f;
         vectorReflect = new Vector2(-Mathf.Sqrt(3) * 0.5f, 0.5f);
-//        vectorReflect = new Vector2( Mathf.Sqrt(3) * 0.5f, 0.5f);
         fluidVelocity = new Vector2(1, 0);
         fluidDensity = 1.0f;
         objectArea_crossSection = 3.0f;
@@ -143,9 +144,9 @@ public class Particle2D : MonoBehaviour
         springStiffnessCoefficient = 5.0f;
 
         inertia = 0f;
+        appliedForce = new Vector2(6, 6);
         //normal = cos(direction), sin(direction)
     }
-
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -158,17 +159,48 @@ public class Particle2D : MonoBehaviour
         //updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
-        UpdateAcceleration();
-
+//        UpdateAcceleration();
        
+//       calculateBoxInertia();
+       // Step 1-4
+       // test
+       // acceleration.x = -Mathf.Sin(Time.fixedTime);
+       // angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
-//       if(gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
+       if (Input.GetKey(KeyCode.UpArrow))
+       {
+           //move up
+           acceleration.y = 5;
+       }
+       else if(Input.GetKey(KeyCode.DownArrow))
+       {
+           //movedown
+           acceleration.y = -5;
+       }
+       else
+       {
+           acceleration.y = 0;
+       }
+       if(Input.GetKey(KeyCode.RightArrow))
+       {
+           //rotate right
+       }
+       else if(Input.GetKey(KeyCode.LeftArrow))
+       {
+           //rotate left
+           appliedForce = new Vector2(1, 0);
+           applyTorque();
+           updateAngularAcceleration();
+
+       }
+
+//       if (gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
 //       {
-//           if(gameObject.transform.localScale.x == transform.localScale.y)
+//           if (gameObject.transform.localScale.x == transform.localScale.y)
 //           {
 //               //we are cube
 //               Debug.Log("This is a cube");
-//               calculateSquareInertia();
+//               calculateCubeInertia();
 //           }
 //           else
 //           {
@@ -176,61 +208,23 @@ public class Particle2D : MonoBehaviour
 //               calculateBoxInertia();
 //           }
 //       }
-//       else if(gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
+//       else if (gameObject.GetComponent<MeshFilter>().mesh.name == "Sphere Instance")
 //       {
 //           Debug.Log("This is a sphere");
 //           calculateDiskInertia();
 //       }
-//       applyTorque();
 //       updateAngularAcceleration();
+//       applyTorque();
 //
 //       // Apply to transform
-       transform.position = position;
-       particlePosition = transform.position;
-       
-        calculateBoxInertia();
-        // Step 1-4
-        // test
-        // acceleration.x = -Mathf.Sin(Time.fixedTime);
-        // angularAcceleration = -Mathf.Sin(Time.fixedTime);
-
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            //move up
-            acceleration.y = 5;
-        }
-        else if(Input.GetKey(KeyCode.DownArrow))
-        {
-            //movedown
-            acceleration.y = -5;
-        }
-        else
-        {
-            acceleration.y = 0;
-        }
-        if(Input.GetKey(KeyCode.RightArrow))
-        {
-            //rotate right
-        }
-        else if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            //rotate left
-            appliedForce = new Vector2(1, 0);
-            applyTorque();
-            updateAngularAcceleration();
-
-        }
-        transform.Rotate(0, 0, rotation);
+        transform.position = position;
+        particlePosition = transform.position;
+//
+//
+//       transform.Rotate(0, 0, angularAcceleration);
+ //       transform.Rotate(0, 0, rotation);
         
-        // Step 2-2 --------------------------------------------------------------------------------------------------------------------------------
-        // f_gravity: f = mg
-        Vector2 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
-        Vector2 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
-//        AddForce(ForceGenerator.GenerateForce_Sliding(gravity, normal));
-//        AddForce(ForceGenerator.GenerateForce_Friction_Static(normal, particleVelocity, frictionCoefficient));
-//        AddForce(ForceGenerator.GenerateForce_friction_kinetic(normal, particleVelocity, frictionCoefficient));
-//        AddForce(ForceGenerator.GenerateForce_drag(particleVelocity, fluidVelocity, fluidDensity, objectArea_crossSection, objectDragCoefficient));
- //       AddForce(ForceGenerator.GenerateForce_spring(particlePosition, anchorPosition, springRestingLength, springStiffnessCoefficient));
+
     }
 
 }

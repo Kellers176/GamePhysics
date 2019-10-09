@@ -158,9 +158,8 @@ MonoBehaviour:
   rotation: 0
   angularVelocity: 0
   angularAcceleration: 0
-  startingMass: 4
+  startingMass: 6
   torque: 0
-  force: {x: 0, y: 0}
 --- !u!65 &18798604
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -229,7 +228,7 @@ Transform:
   m_GameObject: {fileID: 18798602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1018611, y: 2.1226983, z: 0.17112951}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3

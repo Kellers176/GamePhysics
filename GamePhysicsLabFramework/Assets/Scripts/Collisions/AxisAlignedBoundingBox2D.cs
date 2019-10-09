@@ -80,10 +80,10 @@ public class AxisAlignedBoundingBox2D : CollisionHull2D
         float minX2 = other.transform.position.x - (other.transform.localScale.x * 0.5f);
         float maxX2 = other.transform.position.x + (other.transform.localScale.x * 0.5f);
 
-        float nearestX1 = Mathf.Clamp(position.x, minX1, maxX1);
-        float nearestY1 = Mathf.Clamp(position.y, minY1, maxY1);
-        float nearestX2 = Mathf.Clamp(other.position.x, minX2, maxX2);
-        float nearestY2 = Mathf.Clamp(other.position.y, minY2, maxY2);
+        float nearestX1 = Mathf.Clamp(this.transform.position.x, minX1, maxX1);
+        float nearestY1 = Mathf.Clamp(this.transform.position.y, minY1, maxY1);
+        float nearestX2 = Mathf.Clamp(other.transform.position.x, minX2, maxX2);
+        float nearestY2 = Mathf.Clamp(other.transform.position.y, minY2, maxY2);
 
         float distance = Mathf.Sqrt(((nearestX1 - nearestX2) * (nearestX1 - nearestX2)) + ((nearestY1 - nearestY2) * (nearestY1 - nearestY2)));
         float sumOfDistancesX = this.transform.position.x + other.transform.position.x;
