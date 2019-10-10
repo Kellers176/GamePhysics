@@ -29,6 +29,8 @@ public class CollisionManager : MonoBehaviour
             if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsCircle(circle.GetComponent<CircleCollisionHull2D>(), ref tempCollision))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                this.GetComponent<Particle2D>().collisionHull.col.orderContacts();
+                this.GetComponent<Particle2D>().collisionHull.col.resolveContact();
             }
             else if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBox2D>(), ref tempCollision))
             {
