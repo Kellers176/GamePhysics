@@ -61,6 +61,7 @@ public abstract class CollisionHull2D : MonoBehaviour
                 b.particle.SetVelocity(new Vector2(b.particle.particleVelocity.x * impulsePerIMass.x * b.particle.GetInvMass(),
                                                    b.particle.particleVelocity.y * impulsePerIMass.y * b.particle.GetInvMass()));
             }
+
         }
 
         // Resolve every contact that is occuring
