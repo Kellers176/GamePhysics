@@ -159,85 +159,70 @@ public class Particle2D : MonoBehaviour
         speed = 500f;
 
         inertia = 0f;
-        appliedForce = new Vector2(0.1f, 0.1f);
-        //normal = cos(direction), sin(direction)
+        appliedForce = new Vector2(6, 6);
     }
+    public void MoveUp()
+    {
+        Vector2 force = transform.rotation * Vector3.up * speed * Time.fixedDeltaTime;
+        AddForce(force);
+    }
+    public void MoveDown()
+    {
+        Vector2 force = transform.rotation * -Vector3.up * speed * Time.fixedDeltaTime;
+        AddForce(force);
+    }
+    public void MoveLeft()
+    {
+        rotation = rotation % 360;
+
+        calculateBoxInertia();
+        inverseInertia = 1 / inertia;
+
+        applyTorque(new Vector2(-0.001f, 0), appliedForce);
+        updateAngularAcceleration();
+    }
+    public void MoveRight()
+    {
+        rotation = rotation % 360;
+        calculateBoxInertia();
+        inverseInertia = 1 / inertia;
+
+        applyTorque(new Vector2(0.001f, 0), appliedForce);
+        updateAngularAcceleration();
+    }
+
+
     // Update is called once per frame
     void FixedUpdate()
     {
         //normal
         // Step 1-3
-        // Integrate
         updatePositionExplicitEuler(Time.fixedDeltaTime);
-        //updatePositionKinematic(Time.fixedDeltaTime);
         updateRotationEulerExplicit(Time.fixedDeltaTime);
-        //updateRotationKinematic(Time.fixedDeltaTime);
 
-        // Step 2-2
         UpdateAcceleration();
-
-       if (Input.GetKey(KeyCode.UpArrow))
-       {
-            //move up
-            Vector2 force =  transform.up * speed * Time.fixedDeltaTime;
-            AddForce(force);
-            //position += force;
-        }
-       else if(Input.GetKey(KeyCode.DownArrow))
-       {
-            //movedown
-            Vector2 force = -transform.up * speed * Time.fixedDeltaTime;
-            AddForce(force);
-            //position += force;
-       }
-       if(Input.GetKey(KeyCode.RightArrow))
-       {
-            //rotate right
-            //angularAcceleration -= 0.01f;
-            rotation = rotation % 360;
-            calculateDiskInertia();
-            inverseInertia = 1 / inertia;
-            
-            applyTorque((Vector2)Vector3.up + (Vector2)transform.position, appliedForce);
-            updateAngularAcceleration();
-        }
-       else if(Input.GetKey(KeyCode.LeftArrow))
-       {
-            //rotate left
-            //angularAcceleration += 0.01f;
-            //
-            rotation = rotation % 360;
-            calculateDiskInertia();
-            inverseInertia = 1 / inertia;
-            
-            applyTorque((Vector2)Vector3.up + (Vector2)transform.position, -appliedForce);
-            updateAngularAcceleration();
-
-        }
-        
-
-       if(transform.position.y < -1.5f)
+       
+        //wrap
+       if(position.y < -1.5f)
        {
           position.y = 11;
        }
-       if(transform.position.y > 11)
+       if(position.y > 11)
        {
             position.y = -1.5f;
        }
-        if (transform.position.x < -11)
-        {
-            position.x = 11;
-        }
-        if (transform.position.x > 11)
-        {
-            position.x = -11;
-        }
+       if (position.x < -11)
+       {
+           position.x = 11;
+       }
+       if (position.x > 11)
+       {
+           position.x = -11;
+       }
         // Apply to transform
         transform.position = position;
-        particlePosition = transform.position;
 
         transform.Rotate(0, 0, angularAcceleration);
-
     }
 
 }
