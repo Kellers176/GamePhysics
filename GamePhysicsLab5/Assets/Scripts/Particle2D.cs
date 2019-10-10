@@ -14,7 +14,7 @@ public class Particle2D : MonoBehaviour
     public float startingMass;
     float mass, massInv;
     Vector2 vectorReflect;
-    Vector2 particleVelocity;
+    public Vector2 particleVelocity;
     float frictionCoefficient;
     Vector2 fluidVelocity;
     float fluidDensity;
@@ -42,6 +42,14 @@ public class Particle2D : MonoBehaviour
     public float GetMass()
     {
         return mass;
+    }
+    public void SetVelocity(Vector2 newVelocity)
+    {
+        particleVelocity = newVelocity;
+    }
+    public float GetInvMass()
+    {
+        return massInv;
     }
 
     // Step 2-2
@@ -98,7 +106,7 @@ public class Particle2D : MonoBehaviour
     void calculateDiskInertia()
     {
         // I = 1/12m(dx^2 + dy^2)
-        inertia = 0.5f * mass * ((transform.localScale.x * 0.5f) * (transform.localScale.x * 0.5f));
+        inertia = 0.5f * mass * ((transform.localScale.x * 0.5f) + (transform.localScale.x * 0.5f));
     }
     void calculateCubeInertia()
     {
@@ -110,7 +118,7 @@ public class Particle2D : MonoBehaviour
         //resets torque
         // T = IA -> A = I^-1 * T
         angularAcceleration = torque * inverseInertia;
-        //       torque = inertia * angularAcceleration;
+        torque = 0;
     }
 
     void applyTorque(Vector2 force, Vector2 pointOfForce)
@@ -148,10 +156,10 @@ public class Particle2D : MonoBehaviour
         springRestingLength = 2.0f;
         springStiffnessCoefficient = 5.0f;
 
-        speed = 50f;
+        speed = 500f;
 
         inertia = 0f;
-        appliedForce = new Vector2(6, 6);
+        appliedForce = new Vector2(0.1f, 0.1f);
         //normal = cos(direction), sin(direction)
     }
     // Update is called once per frame
@@ -167,39 +175,30 @@ public class Particle2D : MonoBehaviour
 
         // Step 2-2
         UpdateAcceleration();
-       
 
        if (Input.GetKey(KeyCode.UpArrow))
        {
             //move up
-            Vector2 force = transform.rotation * Vector3.up * speed * Time.fixedDeltaTime;
+            Vector2 force =  transform.up * speed * Time.fixedDeltaTime;
             AddForce(force);
             //position += force;
         }
        else if(Input.GetKey(KeyCode.DownArrow))
        {
             //movedown
-            Vector2 force = transform.rotation * -Vector3.up * speed * Time.fixedDeltaTime;
+            Vector2 force = -transform.up * speed * Time.fixedDeltaTime;
             AddForce(force);
             //position += force;
-        }
-       else
-       {
-           acceleration.y = 0;
        }
        if(Input.GetKey(KeyCode.RightArrow))
        {
             //rotate right
             //angularAcceleration -= 0.01f;
-            if (angularAcceleration < -3.14)
-            {
-                angularAcceleration = -3.14f;
-            
-            }
-            calculateBoxInertia();
+            rotation = rotation % 360;
+            calculateDiskInertia();
             inverseInertia = 1 / inertia;
             
-            applyTorque(new Vector2(0.01f, 0), appliedForce);
+            applyTorque((Vector2)Vector3.up + (Vector2)transform.position, appliedForce);
             updateAngularAcceleration();
         }
        else if(Input.GetKey(KeyCode.LeftArrow))
@@ -207,15 +206,11 @@ public class Particle2D : MonoBehaviour
             //rotate left
             //angularAcceleration += 0.01f;
             //
-            if (angularAcceleration > 3.14)
-            {
-                angularAcceleration = 3.14f;
-            
-            }
-            calculateBoxInertia();
+            rotation = rotation % 360;
+            calculateDiskInertia();
             inverseInertia = 1 / inertia;
             
-            applyTorque(new Vector2(-0.01f, 0), appliedForce);
+            applyTorque((Vector2)Vector3.up + (Vector2)transform.position, -appliedForce);
             updateAngularAcceleration();
 
         }

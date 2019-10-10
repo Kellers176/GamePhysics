@@ -9,20 +9,20 @@ public class CircleCollisionHull2D : CollisionHull2D
 
     [Range (0.0f, 100.0f)]
     public float radius;
-
+    public Vector2 centerPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        centerPos = new Vector2(transform.position.x, transform.position.y);
+        col = new Collision();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        centerPos = new Vector2(transform.position.x, transform.position.y);
     }
-
 
     public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c)
     {
@@ -51,6 +51,21 @@ public class CircleCollisionHull2D : CollisionHull2D
 
         if(distanceSquared <= sumSquared)
         {
+            col.a = this;
+            col.b = other;
+
+            col.status = true;
+
+            float theta = Mathf.Atan2(difference.y, difference.x);
+
+            // Set values of the Collision
+            col.contactCount++;
+            float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
+            col.contact[0].point = new Vector2((centerPos.x + Mathf.Cos(theta) * distanceContact), (centerPos.y + Mathf.Sin(theta) * distanceContact));
+            col.contact[0].normal = centerPos - col.contact[0].point;
+            col.contact[0].normal.Normalize();
+            col.contact[0].restitution = restitutionCoeff;
+
             return true;
         }
 
