@@ -14,7 +14,7 @@ public class Particle2D : MonoBehaviour
     public float startingMass;
     float mass, massInv;
     Vector2 vectorReflect;
-    Vector2 particleVelocity;
+    public Vector2 particleVelocity;
     float frictionCoefficient;
     Vector2 fluidVelocity;
     float fluidDensity;
@@ -42,6 +42,14 @@ public class Particle2D : MonoBehaviour
     public float GetMass()
     {
         return mass;
+    }
+    public void SetVelocity(Vector2 newVelocity)
+    {
+        particleVelocity = newVelocity;
+    }
+    public float GetInvMass()
+    {
+        return massInv;
     }
 
     // Step 2-2
