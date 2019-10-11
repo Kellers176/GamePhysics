@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Particle2D : MonoBehaviour
 {
+
+    public CollisionHull2D collisionHull;
     // Step 1-1
     public Vector2 position, velocity, acceleration;
     public float rotation, angularVelocity, angularAcceleration;
@@ -33,6 +35,8 @@ public class Particle2D : MonoBehaviour
     bool pressingLeft = false;
     bool pressingRight = false;
 
+    float x;
+
     public void SetMass(float newMass)
     {
         //mass = newMass > 0.0f ? newMass : 0.0f;
@@ -45,7 +49,7 @@ public class Particle2D : MonoBehaviour
     }
     public void SetVelocity(Vector2 newVelocity)
     {
-        particleVelocity = newVelocity;
+        velocity = newVelocity;
     }
     public float GetInvMass()
     {
@@ -66,6 +70,7 @@ public class Particle2D : MonoBehaviour
 
         force.Set(0.0f, 0.0f);
     }
+
 
     // Step 1-2
     void updatePositionExplicitEuler(float dt)
@@ -97,6 +102,14 @@ public class Particle2D : MonoBehaviour
         angularVelocity += angularAcceleration * dt;
     }
 
+    public void MoveObjectLeft()
+    {
+        velocity.x -= 2f * Time.deltaTime;
+    }
+    public void MoveObjectRight()
+    {
+        velocity.x += 2f * Time.deltaTime;
+    }
     //Step 3
     void calculateBoxInertia()
     {
@@ -118,7 +131,6 @@ public class Particle2D : MonoBehaviour
         //resets torque
         // T = IA -> A = I^-1 * T
         angularAcceleration = torque * inverseInertia;
-        torque = 0;
     }
 
     void applyTorque(Vector2 force, Vector2 pointOfForce)
@@ -154,10 +166,11 @@ public class Particle2D : MonoBehaviour
         objectDragCoefficient = 0.5f;
         anchorPosition = new Vector2(0, 0);
         springRestingLength = 2.0f;
+        collisionHull = this.gameObject.GetComponent<CollisionHull2D>();
         springStiffnessCoefficient = 5.0f;
 
         speed = 500f;
-
+        x = 0;
         inertia = 0f;
         appliedForce = new Vector2(6, 6);
     }
@@ -201,9 +214,18 @@ public class Particle2D : MonoBehaviour
         updateRotationEulerExplicit(Time.fixedDeltaTime);
 
         UpdateAcceleration();
-       
+
+
+        if(this.gameObject.tag == "mover")
+        {
+            MoveObjectLeft();
+        }
+        if (this.gameObject.tag == "moveRight")
+        {
+            MoveObjectRight();
+        }
         //wrap
-       if(position.y < -1.5f)
+        if (position.y < -1.5f)
        {
           position.y = 11;
        }
@@ -218,6 +240,17 @@ public class Particle2D : MonoBehaviour
        if (position.x > 11)
        {
            position.x = -11;
+       }
+
+
+       //cap velocity
+       if(velocity.x > 3)
+       {
+           velocity.x = 3;
+       }
+       if (velocity.y > 3)
+       {
+           velocity.y = 3;
        }
         // Apply to transform
         transform.position = position;

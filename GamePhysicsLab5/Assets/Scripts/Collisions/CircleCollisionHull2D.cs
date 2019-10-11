@@ -16,6 +16,9 @@ public class CircleCollisionHull2D : CollisionHull2D
     {
         centerPos = new Vector2(transform.position.x, transform.position.y);
         col = new Collision();
+        particle = GetComponent<Particle2D>();
+
+        particle.SetMass(0.5f);
     }
 
     // Update is called once per frame
@@ -24,7 +27,7 @@ public class CircleCollisionHull2D : CollisionHull2D
         centerPos = new Vector2(transform.position.x, transform.position.y);
     }
 
-    public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision c)
+    public override bool TestCollisionVsCircle(CircleCollisionHull2D other, ref Collision col)
     {
         //works
         // pass if distance between centers <= sum of radii
@@ -58,9 +61,11 @@ public class CircleCollisionHull2D : CollisionHull2D
 
             float theta = Mathf.Atan2(difference.y, difference.x);
 
+           
             // Set values of the Collision
-            col.contactCount++;
+            col.contactCount = 1;
             float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
+            col.contact[0].collisionDepth = radius - distanceContact;
             col.contact[0].point = new Vector2((centerPos.x + Mathf.Cos(theta) * distanceContact), (centerPos.y + Mathf.Sin(theta) * distanceContact));
             col.contact[0].normal = centerPos - col.contact[0].point;
             col.contact[0].normal.Normalize();
