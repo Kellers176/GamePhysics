@@ -105,11 +105,13 @@ public abstract class CollisionHull2D : MonoBehaviour
             movement[1] = movementPerIMass * -b.particle.GetInvMass();
 
 
-            a.particle.position.x = (a.transform.position.x + movement[0].x);
-            a.particle.position.y = (a.transform.position.y + movement[0].y);
-            b.particle.position.x = (a.transform.position.x + movement[1].x);
-            b.particle.position.y = (a.transform.position.y + movement[1].y);
+            //a.particle.position.x = (a.transform.position.x + movement[0].x);
+            //a.particle.position.y = (a.transform.position.y + movement[0].y);
+            //b.particle.position.x = (a.transform.position.x + movement[1].x);
+            //b.particle.position.y = (a.transform.position.y + movement[1].y);
 
+            a.particle.SetPosition(new Vector2(a.transform.position.x + movement[0].x, a.transform.position.y + movement[0].y));
+            b.particle.SetPosition(new Vector2(b.transform.position.x + movement[1].x, b.transform.position.y + movement[1].y));
         }
 
         

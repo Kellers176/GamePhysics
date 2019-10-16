@@ -51,6 +51,10 @@ public class Particle2D : MonoBehaviour
     {
         velocity = newVelocity;
     }
+    public void SetPosition(Vector2 newPosition)
+    {
+        position = newPosition;
+    }
     public float GetInvMass()
     {
         return massInv;
