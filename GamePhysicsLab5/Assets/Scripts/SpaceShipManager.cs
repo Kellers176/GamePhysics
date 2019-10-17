@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;   
+using UnityEngine.UI;
+using TMPro;
 
 public class SpaceShipManager : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class SpaceShipManager : MonoBehaviour
     Particle2D particle;
     public Slider greenBar;
 
-    float playerHealth;
+    public float playerHealth;
+    public TextMeshProUGUI text;
      
     // Start is called before the first frame update
     void Start()
@@ -49,9 +51,9 @@ public class SpaceShipManager : MonoBehaviour
             particle.MoveLeft();
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(playerHealth < 0)
         {
-            playerHealth -= 0.1f;   
+            text.enabled = true;
         }
     }
 }

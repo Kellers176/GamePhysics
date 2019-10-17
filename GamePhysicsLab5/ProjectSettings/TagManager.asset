@@ -6,6 +6,7 @@ TagManager:
   tags:
   - mover
   - moveRight
+  - ship
   layers:
   - Default
   - TransparentFX
