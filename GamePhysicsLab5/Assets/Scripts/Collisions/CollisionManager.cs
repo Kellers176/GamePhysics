@@ -29,7 +29,7 @@ public class CollisionManager : MonoBehaviour
                 if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsCircle(circle[j].GetComponent<CircleCollisionHull2D>(), ref circle[i].GetComponent<CircleCollisionHull2D>().col))
                 {
                     if(this.gameObject.tag == "ship")
-                        this.GetComponent<SpaceShipManager>().playerHealth -= 0.1f;
+                        this.GetComponent<SpaceShipManager>().playerHealth -= 0.01f;
                     colliding = true;
                 }   
             }

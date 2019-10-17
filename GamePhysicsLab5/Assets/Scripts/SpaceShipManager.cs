@@ -12,12 +12,15 @@ public class SpaceShipManager : MonoBehaviour
 
     public float playerHealth;
     public TextMeshProUGUI text;
+
+    bool gameOvered;
      
     // Start is called before the first frame update
     void Start()
     {
         particle = this.gameObject.GetComponent<Particle2D>();
         playerHealth = 1;
+        gameOvered = false;
     }
 
     // Update is called once per frame
@@ -30,30 +33,34 @@ public class SpaceShipManager : MonoBehaviour
     {
 
         greenBar.value = playerHealth;
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (!gameOvered)
         {
-            //move up
-            particle.MoveUp();
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            //movedown
-            particle.MoveDown();
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            //rotate right
-            particle.MoveRight();
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            //rotate left
-            particle.MoveLeft();
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                //move up
+                particle.MoveUp();
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                //movedown
+                particle.MoveDown();
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                //rotate right
+                particle.MoveRight();
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                //rotate left
+                particle.MoveLeft();
+            }
         }
 
         if(playerHealth < 0)
         {
-            text.enabled = true;
+            text.gameObject.SetActive(true);
+            gameOvered = true;
         }
     }
 }
