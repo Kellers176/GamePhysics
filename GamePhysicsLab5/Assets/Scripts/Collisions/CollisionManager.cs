@@ -28,7 +28,7 @@ public class CollisionManager : MonoBehaviour
             {
                 if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsCircle(circle[j].GetComponent<CircleCollisionHull2D>(), ref circle[i].GetComponent<CircleCollisionHull2D>().col))
                 {
-                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                    //this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
                 //this.GetComponent<Particle2D>().collisionHull.col.setA(this.GetComponent<CircleCollisionHull2D>());
                 //this.GetComponent<Particle2D>().collisionHull.col.setB(circle.GetComponent<CircleCollisionHull2D>());
                     colliding = true;
@@ -46,7 +46,7 @@ public class CollisionManager : MonoBehaviour
             if(colliding)
             {
                 circle[i].GetComponent<CircleCollisionHull2D>().col.orderContacts();
-                circle[i].GetComponent<CircleCollisionHull2D>().col.resolveContact();
+                //circle[i].GetComponent<CircleCollisionHull2D>().col.resolveContact();
             }
             colliding = false;
         }

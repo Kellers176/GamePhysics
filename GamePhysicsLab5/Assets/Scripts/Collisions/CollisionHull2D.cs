@@ -13,7 +13,6 @@ public abstract class CollisionHull2D : MonoBehaviour
             public float restitution;
             public float collisionDepth;
 
-
             public Vector3 velocity;
         }
 
@@ -35,39 +34,31 @@ public abstract class CollisionHull2D : MonoBehaviour
         public void resolveCollision(Contact contactHit)
         {
             // Calculate closing Velocity between the two particles that contacted
-            closingVelocity = (a.particle.velocity - b.particle.velocity) * contactHit.normal;
+            closingVelocity = a.particle.velocity - b.particle.velocity;
 
-            // Objects aren't moving
-            if (closingVelocity.x >= 0 && closingVelocity.y >= 0)
+            float diffX = b.particle.position.x - a.particle.position.x;
+            float diffY = b.particle.position.y - a.particle.position.y;
+
+            if (closingVelocity.x * closingVelocity.y * diffX * diffY >= 0)
             {
-                return;
+                float angle = -Mathf.Atan2(closingVelocity.y, closingVelocity.x) * Mathf.Rad2Deg;
+
+                float massA = a.particle.GetMass();
+                float massB = b.particle.GetMass();
+
+                Vector2 rotatedVectorA = Quaternion.Euler(0, 0, angle) * a.particle.velocity;
+                Vector2 rotatedVectorB = Quaternion.Euler(0, 0, angle) * b.particle.velocity;
+
+                Vector2 newVelA = new Vector2(rotatedVectorA.x * (massA - massB) / (massA + massB) + rotatedVectorB.x / 2 * massB / (massA + massB), rotatedVectorA.y);
+                Vector2 newVelB = new Vector2(rotatedVectorB.x * (massA - massB) / (massA + massB) + rotatedVectorA.x / 2 * massB / (massA + massB), rotatedVectorB.y);
+
+                // Final velocity at the correct angle to be set to
+                Vector2 finalVelA = Quaternion.Euler(0, 0, -angle) * newVelA;
+                Vector2 finalVelB = Quaternion.Euler(0, 0, -angle) * newVelB;
+
+                a.particle.SetVelocity(finalVelA);
+                b.particle.SetVelocity(finalVelB);
             }
-
-            // Calculate the delta Velocity with restitution coefficient
-            Vector2 deltaVelocity = (-closingVelocity * contactHit.restitution) - closingVelocity;
-
-            // Getting the total inverse mass of both particles
-            float totalIMass = a.particle.GetInvMass() + b.particle.GetInvMass();
-            if (totalIMass <= 0)
-            {
-                return;
-            }
-
-            // Calculate impulse and impulse per inverse mass
-            Vector2 impulse = deltaVelocity / totalIMass;
-            Vector2 impulsePerIMass = contactHit.normal * impulse;
-
-
-            // Set the new velocity of particle a and the new velocity of particle b if b exists
-                a.particle.SetVelocity(new Vector2(a.particle.velocity.x * impulsePerIMass.x * a.particle.GetInvMass(),
-                                               a.particle.velocity.y * impulsePerIMass.y * a.particle.GetInvMass()));
-            if (b.particle != null)
-            {
-                    b.particle.SetVelocity(new Vector2(b.particle.velocity.x * impulsePerIMass.x * b.particle.GetInvMass(),
-                                                   b.particle.velocity.y * impulsePerIMass.y * b.particle.GetInvMass()));
-                
-            }
-            contactCount = 0;
 
             resolveInterpenetration(contactHit);
         }
@@ -85,6 +76,7 @@ public abstract class CollisionHull2D : MonoBehaviour
             }
         }
 
+        // Resolve two spheres within each other
         public void resolveInterpenetration(Contact contactHit)
         {
             Vector2[] movement = new Vector2[2];
@@ -103,12 +95,6 @@ public abstract class CollisionHull2D : MonoBehaviour
             Vector2 movementPerIMass = contactHit.normal * (contactHit.collisionDepth / totalIMass);
             movement[0] = movementPerIMass * a.particle.GetInvMass();
             movement[1] = movementPerIMass * -b.particle.GetInvMass();
-
-
-            //a.particle.position.x = (a.transform.position.x + movement[0].x);
-            //a.particle.position.y = (a.transform.position.y + movement[0].y);
-            //b.particle.position.x = (a.transform.position.x + movement[1].x);
-            //b.particle.position.y = (a.transform.position.y + movement[1].y);
 
             a.particle.SetPosition(new Vector2(a.transform.position.x + movement[0].x, a.transform.position.y + movement[0].y));
             b.particle.SetPosition(new Vector2(b.transform.position.x + movement[1].x, b.transform.position.y + movement[1].y));
