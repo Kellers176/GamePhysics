@@ -36,12 +36,15 @@ public abstract class CollisionHull2D : MonoBehaviour
             // Calculate closing Velocity between the two particles that contacted
             closingVelocity = a.particle.velocity - b.particle.velocity;
 
+            float xVelocityDiff = a.particle.velocity.x - b.particle.velocity.x;
+            float yVelocityDiff = a.particle.velocity.y - b.particle.velocity.y;
+
             float diffX = b.particle.position.x - a.particle.position.x;
             float diffY = b.particle.position.y - a.particle.position.y;
 
-            if (closingVelocity.x * closingVelocity.y * diffX * diffY >= 0)
+            if (xVelocityDiff * diffX + yVelocityDiff * diffY >= 0)
             {
-                float angle = -Mathf.Atan2(closingVelocity.y, closingVelocity.x) * Mathf.Rad2Deg;
+                float angle = -Mathf.Atan2(yVelocityDiff, xVelocityDiff) * Mathf.Rad2Deg;
 
                 float massA = a.particle.GetMass();
                 float massB = b.particle.GetMass();
@@ -49,15 +52,19 @@ public abstract class CollisionHull2D : MonoBehaviour
                 Vector2 rotatedVectorA = Quaternion.Euler(0, 0, angle) * a.particle.velocity;
                 Vector2 rotatedVectorB = Quaternion.Euler(0, 0, angle) * b.particle.velocity;
 
-                Vector2 newVelA = new Vector2(rotatedVectorA.x * (massA - massB) / (massA + massB) + rotatedVectorB.x / 2 * massB / (massA + massB), rotatedVectorA.y);
-                Vector2 newVelB = new Vector2(rotatedVectorB.x * (massA - massB) / (massA + massB) + rotatedVectorA.x / 2 * massB / (massA + massB), rotatedVectorB.y);
+                Vector2 newVelA = new Vector2(rotatedVectorA.x * (massA - massB) / (massA + massB) + rotatedVectorB.x * 2f * massB / (massA + massB), rotatedVectorA.y);
+                Vector2 newVelB = new Vector2(rotatedVectorB.x * (massA - massB) / (massA + massB) + rotatedVectorA.x * 2f * massB / (massA + massB), rotatedVectorB.y);
 
                 // Final velocity at the correct angle to be set to
-                Vector2 finalVelA = Quaternion.Euler(0, 0, -angle) * newVelA;
-                Vector2 finalVelB = Quaternion.Euler(0, 0, -angle) * newVelB;
+                //Vector2 finalVelA = Quaternion.Euler(0, 0, -angle) * newVelA;
+                //Vector2 finalVelB = Quaternion.Euler(0, 0, -angle) * newVelB;
 
-                a.particle.SetVelocity(finalVelA);
-                b.particle.SetVelocity(finalVelB);
+                a.particle.SetVelocityX(newVelA.x);
+                a.particle.SetVelocityY(newVelA.y);
+
+                b.particle.SetVelocityX(newVelB.x);
+                b.particle.SetVelocityY(newVelB.y);
+
             }
 
             resolveInterpenetration(contactHit);
@@ -83,12 +90,14 @@ public abstract class CollisionHull2D : MonoBehaviour
 
             if(contactHit.collisionDepth <= 0)
             {
+                Debug.Log("Collision Depth < 0");
                 return;
             }
 
             float totalIMass = a.particle.GetInvMass() + b.particle.GetInvMass();
             if (totalIMass <= 0)
             {
+                Debug.Log("totalIMass < 0");
                 return;
             }
 
@@ -96,8 +105,13 @@ public abstract class CollisionHull2D : MonoBehaviour
             movement[0] = movementPerIMass * a.particle.GetInvMass();
             movement[1] = movementPerIMass * -b.particle.GetInvMass();
 
-            a.particle.SetPosition(new Vector2(a.transform.position.x + movement[0].x, a.transform.position.y + movement[0].y));
-            b.particle.SetPosition(new Vector2(b.transform.position.x + movement[1].x, b.transform.position.y + movement[1].y));
+            a.particle.SetPositionX(a.transform.position.x + movement[0].x);
+            a.particle.SetPositionY(a.transform.position.y + movement[0].y);
+
+            b.particle.SetPositionX(a.transform.position.x + movement[1].x);
+            b.particle.SetPositionY(a.transform.position.y + movement[1].y);
+            //a.particle.SetPosition(new Vector2(a.transform.position.x + movement[0].x, a.transform.position.y + movement[0].y));
+            //b.particle.SetPosition(new Vector2(b.transform.position.x + movement[1].x, b.transform.position.y + movement[1].y));
         }
 
         
@@ -150,7 +164,7 @@ public abstract class CollisionHull2D : MonoBehaviour
     public Collision col;
     public bool isColliding = false;
     [SerializeField]
-    public float restitutionCoeff = 0.01f;
+    public float restitutionCoeff = 0.9f;
 
     // Start is called before the first frame update
     void Start()

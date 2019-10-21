@@ -18,7 +18,7 @@ public class CircleCollisionHull2D : CollisionHull2D
         col = new Collision();
         particle = GetComponent<Particle2D>();
 
-        particle.SetMass(0.5f);
+        //particle.SetMass(0.5f);
     }
 
     // Update is called once per frame
@@ -48,11 +48,13 @@ public class CircleCollisionHull2D : CollisionHull2D
         //I am confused
         float distanceSquared = Vector2.SqrMagnitude(difference);
 
+        float distance = Vector2.Dot(difference, difference);
+
         float sumOfRadii = other.radius + this.radius;
 
         float sumSquared = sumOfRadii * sumOfRadii;
 
-        if(distanceSquared <= sumSquared)
+        if(distance <= sumSquared)
         {
             col.a = this;
             col.b = other;
@@ -61,15 +63,16 @@ public class CircleCollisionHull2D : CollisionHull2D
 
             float theta = Mathf.Atan2(difference.y, difference.x);
 
-           
             // Set values of the Collision
             col.contactCount = 1;
-            float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
+            float distanceContact = ((distance * distance) - (other.radius * other.radius) + (radius * radius) / (2 * distance));
             col.contact[0].collisionDepth = radius - distanceContact;
-            col.contact[0].point = new Vector2((centerPos.x + Mathf.Cos(theta) * distanceContact), (centerPos.y + Mathf.Sin(theta) * distanceContact));
+            col.contact[0].point.x = centerPos.x + Mathf.Cos(theta) * distanceContact;
+            col.contact[0].point.y = centerPos.y + Mathf.Sin(theta) * distanceContact;
             col.contact[0].normal = centerPos - col.contact[0].point;
             col.contact[0].normal.Normalize();
             col.contact[0].restitution = restitutionCoeff;
+            
 
             return true;
         }

@@ -123,7 +123,7 @@ MonoBehaviour:
   rangeMin: -11
   rangeMax: 11
   timeInterval: 0
-  velocity: {x: 6, y: 6}
+  velocity: {x: 0.5, y: 0.5}
 --- !u!212 &2163821421986060597
 SpriteRenderer:
   m_ObjectHideFlags: 0

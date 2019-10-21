@@ -51,9 +51,25 @@ public class Particle2D : MonoBehaviour
     {
         velocity = newVelocity;
     }
+    public void SetVelocityX(float newVelocity)
+    {
+        velocity.x = newVelocity;
+    }
+    public void SetVelocityY(float newVelocity)
+    {
+        velocity.y = newVelocity;
+    }
     public void SetPosition(Vector2 newPosition)
     {
         position = newPosition;
+    }
+    public void SetPositionX(float newPosition)
+    {
+        position.x = newPosition;
+    }
+    public void SetPositionY(float newPosition)
+    {
+        position.y = newPosition;
     }
     public float GetInvMass()
     {
@@ -195,7 +211,7 @@ public class Particle2D : MonoBehaviour
         calculateBoxInertia();
         inverseInertia = 1 / inertia;
 
-        applyTorque(new Vector2(-0.001f, 0), appliedForce);
+        applyTorque(new Vector2(-0.0001f, 0), appliedForce);
         updateAngularAcceleration();
     }
     public void MoveRight()
@@ -204,7 +220,7 @@ public class Particle2D : MonoBehaviour
         calculateBoxInertia();
         inverseInertia = 1 / inertia;
 
-        applyTorque(new Vector2(0.001f, 0), appliedForce);
+        applyTorque(new Vector2(0.0001f, 0), appliedForce);
         updateAngularAcceleration();
     }
 
