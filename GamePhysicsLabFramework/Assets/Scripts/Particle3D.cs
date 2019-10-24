@@ -41,20 +41,20 @@ public class Particle3D : MonoBehaviour
         return mass;
     }
 
-    public Quaternion multiplyQuatByScalar(float i, float j, float k, Quaternion quat)
+    public void multiplyQuatByScalar(float i, ref Quaternion quat)
     {
-        Quaternion temp = new Quaternion(quat.w * 1, quat.x * i, quat.y * j, quat.z * k);
-        return temp;
+        Quaternion temp = new Quaternion(quat.w * i, quat.x * i, quat.y * i, quat.z * i);
+        quat = temp;
     }
 
-    public Quaternion multiplyQuatBy3DVec(Vector3 vec, Quaternion quat)
+    public void multiplyQuatBy3DVec(Vector3 vec, ref Quaternion quat)
     {
         //scalar(vec3) + Cross(vec3, quat xyz)
         Vector3 tempQuat = new Vector3(quat.x, quat.y, quat.z);
         Vector3 crossProduct = tempQuat + (quat.w * vec) + Vector3.Cross(vec, tempQuat);
         Quaternion finalQuat = new Quaternion(quat.x - Vector3.Dot(vec, tempQuat), crossProduct.x, crossProduct.y, crossProduct.z);
 
-        return finalQuat;
+        quat = finalQuat;
     }
 
     // Step 2-2
@@ -75,10 +75,6 @@ public class Particle3D : MonoBehaviour
     // Step 1-2
     void updatePositionExplicitEuler(float dt)
     {
-        // x(t+dt) = x(t) + v(t)dt
-        // Euler's method:
-        // F(t+dt) = F(t) + f(t)dt
-        //                + (dF/dt)dt
 
         //derivative for the quaternion
         position += velocity * dt;
@@ -95,12 +91,24 @@ public class Particle3D : MonoBehaviour
     }
     void updateRotationEulerExplicit(float dt)
     {
-        //rotation += angularVelocity * dt;
+        //rotation.x += angularVelocity.x * dt;
+        //rotation.y += angularVelocity.y * dt;
+        //rotation.z += angularVelocity.z * dt;
+        //Quaternion temp;
+        //scaled vector
+        Vector3 scaledVector = new Vector3(angularVelocity.x * dt, angularVelocity.y * dt, angularVelocity.z * dt);
+        //multiplyQuatByScalar(0.5f, ref rotation);
+        multiplyQuatBy3DVec(scaledVector, ref rotation);
+        //multiplyQuatBy3DVec(angularVelocity * dt, ref rotation);
+        //Quaternion invRotation = new Quaternion(rotation.w, -rotation.x, -rotation.y, -rotation.z);
+        //rotation *= invRotation;
         angularVelocity += angularAcceleration * dt;
     }
     void updateRotationKinematic(float dt)
     {
-        //rotation += angularVelocity * dt + (0.5f * angularAcceleration * (dt * dt));
+        //1/2 * wt * qt
+        multiplyQuatBy3DVec(angularVelocity * dt + (0.5f * angularAcceleration * (dt * dt)), ref rotation);
+        //multiplyQuatByScalar(0.5f, ref rotation);
         angularVelocity += angularAcceleration * dt;
     }
 
@@ -171,18 +179,21 @@ public class Particle3D : MonoBehaviour
         //normal
         // Step 1-3
         // Integrate
-        updatePositionExplicitEuler(Time.fixedDeltaTime);
+        //updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
         //updateRotationEulerExplicit(Time.fixedDeltaTime);
-        //updateRotationKinematic(Time.fixedDeltaTime);
+        updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
         UpdateAcceleration();
 
+        acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
+        angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
 
-//       // Apply to transform
-       transform.position = position;
-       particlePosition = transform.position;
+        //       // Apply to transform
+        transform.position = position;
+        particlePosition = transform.position;
+        transform.rotation = rotation;
         // transform.Rotate(0, 0, rotation);
 
     }
