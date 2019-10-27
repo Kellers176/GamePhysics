@@ -7,6 +7,7 @@ public class Particle3D : MonoBehaviour
     // Step 1-1
     public Vector3 position, velocity, acceleration;
     public Quaternion rotation;
+    Quaternion newRotation;
     public Vector3 angularVelocity, angularAcceleration, torque;
 
     // Step 2-1
@@ -29,7 +30,10 @@ public class Particle3D : MonoBehaviour
     Vector2 localCenterOfMass;
     Vector2 worldCenterOfMass;
     Vector2 appliedForce;
-    
+
+    float w, x, y, z;
+
+
     public void SetMass(float newMass)
     {
         //mass = newMass > 0.0f ? newMass : 0.0f;
@@ -41,20 +45,22 @@ public class Particle3D : MonoBehaviour
         return mass;
     }
 
-    public void multiplyQuatByScalar(float i, ref Quaternion quat)
+    public Quaternion multiplyQuatByScalar(float i, Quaternion quat)
     {
         Quaternion temp = new Quaternion(quat.w * i, quat.x * i, quat.y * i, quat.z * i);
-        quat = temp;
+        return temp;
     }
 
-    public void multiplyQuatBy3DVec(Vector3 vec, ref Quaternion quat)
+    public Quaternion multiplyQuatBy3DVec(Vector3 vec, Quaternion quat)
     {
-        //scalar(vec3) + Cross(vec3, quat xyz)
-        Vector3 tempQuat = new Vector3(quat.x, quat.y, quat.z);
-        Vector3 crossProduct = tempQuat + (quat.w * vec) + Vector3.Cross(vec, tempQuat);
-        Quaternion finalQuat = new Quaternion(quat.x - Vector3.Dot(vec, tempQuat), crossProduct.x, crossProduct.y, crossProduct.z);
 
-        quat = finalQuat;
+        Vector3 tempQuat = new Vector3(quat.x, quat.y, quat.z);
+        Vector3 crossProduct = (0 * tempQuat) + (quat.w * vec) + (Vector3.Cross(vec, tempQuat));
+
+        
+        Quaternion finalQuat = new Quaternion((0 * quat.w) - Vector3.Dot(vec, tempQuat), crossProduct.x, crossProduct.y, crossProduct.z);
+
+        return finalQuat;
     }
 
     // Step 2-2
@@ -94,23 +100,24 @@ public class Particle3D : MonoBehaviour
         //rotation.x += angularVelocity.x * dt;
         //rotation.y += angularVelocity.y * dt;
         //rotation.z += angularVelocity.z * dt;
-        //Quaternion temp;
+        Quaternion temp;
         //scaled vector
-        Vector3 scaledVector = new Vector3(angularVelocity.x * dt, angularVelocity.y * dt, angularVelocity.z * dt);
         //multiplyQuatByScalar(0.5f, ref rotation);
-        multiplyQuatBy3DVec(scaledVector, ref rotation);
+        temp =  multiplyQuatBy3DVec(angularVelocity, rotation);
+        Quaternion temp2 = multiplyQuatByScalar(0.5f /** dt*/, temp);
+        newRotation = new Quaternion(rotation.w + temp2.w, rotation.x + temp2.x, rotation.y + temp2.y, rotation.z + temp2.z);
         //multiplyQuatBy3DVec(angularVelocity * dt, ref rotation);
         //Quaternion invRotation = new Quaternion(rotation.w, -rotation.x, -rotation.y, -rotation.z);
         //rotation *= invRotation;
         angularVelocity += angularAcceleration * dt;
     }
-    void updateRotationKinematic(float dt)
-    {
-        //1/2 * wt * qt
-        multiplyQuatBy3DVec(angularVelocity * dt + (0.5f * angularAcceleration * (dt * dt)), ref rotation);
-        //multiplyQuatByScalar(0.5f, ref rotation);
-        angularVelocity += angularAcceleration * dt;
-    }
+//    void updateRotationKinematic(float dt)
+//    {
+//        //1/2 * wt * qt
+//        multiplyQuatBy3DVec(angularVelocity * dt + (0.5f * angularAcceleration * (dt * dt)), ref rotation);
+//        //multiplyQuatByScalar(0.5f, ref rotation);
+//        angularVelocity += angularAcceleration * dt;
+//    }
 
     //Step 3
     void calculateBoxInertia()
@@ -170,6 +177,10 @@ public class Particle3D : MonoBehaviour
 
         inertia = 0f;
         appliedForce = new Vector2(1, 0);
+        w = 0;
+        x = 0;
+        y = 0;
+        z = 0;
         //normal = cos(direction), sin(direction)
     }
 
@@ -179,10 +190,10 @@ public class Particle3D : MonoBehaviour
         //normal
         // Step 1-3
         // Integrate
-        //updatePositionExplicitEuler(Time.fixedDeltaTime);
+        updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
         //updateRotationEulerExplicit(Time.fixedDeltaTime);
-        updateRotationKinematic(Time.fixedDeltaTime);
+        //updateRotationKinematic(Time.fixedDeltaTime);
 
         // Step 2-2
         UpdateAcceleration();
@@ -193,7 +204,7 @@ public class Particle3D : MonoBehaviour
         //       // Apply to transform
         transform.position = position;
         particlePosition = transform.position;
-        transform.rotation = rotation;
+        transform.rotation = newRotation;
         // transform.Rotate(0, 0, rotation);
 
     }
