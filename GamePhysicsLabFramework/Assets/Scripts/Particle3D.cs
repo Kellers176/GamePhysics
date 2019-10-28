@@ -13,25 +13,18 @@ public class Particle3D : MonoBehaviour
     // Step 2-1
     public float startingMass;
     float mass, massInv;
-    Vector2 vectorReflect;
-    Vector2 particleVelocity;
-    float frictionCoefficient;
-    Vector2 fluidVelocity;
-    float fluidDensity;
-    float objectArea_crossSection;
-    float objectDragCoefficient;
-    Vector2 anchorPosition;
-    Vector2 particlePosition;
-    float springRestingLength;
-    float springStiffnessCoefficient;
-
     //Step 3
-    float inertia;
-    Vector2 localCenterOfMass;
-    Vector2 worldCenterOfMass;
+    public float inertia;
+    public float inverseInertia;
     Vector2 appliedForce;
 
-    float w, x, y, z;
+    Matrix4x4 worldTransformationMatrix;
+    Matrix4x4 invWorldTransformationMatrix;
+
+    Vector3 localCenterOfMass, worldCenterOfMass;
+
+    Matrix4x4 localInertiaTensor, worldInertiaTensor;
+    //Matriox4x4.trs (transform, rotation, scale)
 
 
     public void SetMass(float newMass)
@@ -139,48 +132,114 @@ public class Particle3D : MonoBehaviour
         //converts torque to angular acceleration
         //resets torque
         // T = IA -> A = I^-1 * T
-        angularAcceleration = torque / inertia;
-        torque = inertia * angularAcceleration;
+        angularAcceleration = torque * inverseInertia;
+        //       torque = inertia * angularAcceleration;
     }
 
-    void applyTorque()
+    void applyTorque(Vector3 force, Vector3 pointOfForce)
     {
-        //applied torque: T = pf x F
+        //applied torque: T = I * a
         //T is torque, pf is moment arm (point of applied force relative to center of mass), F is applied force at pf. 
         //center of mass may not be the center of the object
-        //might help to add a separate member for center of mass in local and world space
-        //center of mass = 0;
-        //world = local object * transform of object matrix
-        localCenterOfMass = new Vector2(0, 0);
-//        localCenterOfMass = new Vector2(transform.localPosition.x, transform.localPosition.y);
-        worldCenterOfMass = transform.localToWorldMatrix.MultiplyVector(localCenterOfMass);
+        
+        Vector2 momentArm = pointOfForce - position;
 
-        //torque = Vector3.Cross(worldCenterOfMass, appliedForce).y;
+        //torque += (momentArm.x * force.y - momentArm.y * force.x);
+        torque = Vector3.Cross(momentArm, pointOfForce);
     }
+
+    void SetITSolidSphere(float scale)
+    {
+        //      |2/5mr^2                        |
+        // I =  |           2/5mr^2             |
+        //      |                       2/5mr^2 |
+        //could be set in start
+        localInertiaTensor.m00 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
+        localInertiaTensor.m11 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
+        localInertiaTensor.m22 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
+        localInertiaTensor.m33 = 0;
+
+
+
+
+        //change of basis: take our local torque, apply our tensor to it, more it back to world
+
+
+    }
+    void SetITHollowSphere(float radius)
+    {
+        //      |2/3mr^2                        |
+        // I =  |           2/3mr^2             |
+        //      |                       2/3mr^2 |
+        localInertiaTensor.m00 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
+        localInertiaTensor.m11 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
+        localInertiaTensor.m22 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
+        localInertiaTensor.m33 = 0;
+
+    }
+    void SetITSolidBox(float height, float depth, float width)
+    {
+        //      |1/12m(h^2 + d^2)                                       |
+        // I =  |                   1/12m(d^2 + w^2)                    |
+        //      |                                       1/12m(w^2 + h^2)|
+        localInertiaTensor.m00 = 1 / 12 * mass * ((height * height) + (depth * depth));
+        localInertiaTensor.m11 = 1 / 12 * mass * ((depth * depth) + (width * width));
+        localInertiaTensor.m22 = 1 / 12 * mass * ((width * width) + (height * height));
+        localInertiaTensor.m33 = 0;
+
+
+
+    }
+    void SetITHollowBox(float height, float depth, float width)
+    {
+        //      |5/3m(h^2 + d^2)                                       |
+        // I =  |                   5/3m(d^2 + w^2)                    |
+        //      |                                       5/3m(w^2 + h^2)|
+        localInertiaTensor.m00 = 5 / 3 * mass * ((height * height) + (depth * depth));
+        localInertiaTensor.m11 = 5 / 3 * mass * ((depth * depth) + (width * width));
+        localInertiaTensor.m22 = 5 / 3 * mass * ((width * width) + (height * height));
+        localInertiaTensor.m33 = 0;
+
+
+    }
+    void SetITSolidCylinder(float radius, float height)
+    {
+        //      |1/12m(3r^2 + h^2)                                  |
+        // I =  |                   1/12m(3r^2 + h^2)               |
+        //      |                                          1/2mr^2  |
+        localInertiaTensor.m00 = 1 / 12 * mass * ((3 * (radius * radius)) + (height * height));
+        localInertiaTensor.m11 = 1 / 12 * mass * ((3 * (radius * radius)) + (height * height));
+        localInertiaTensor.m22 = 1 / 2 * mass * (radius * radius);
+        localInertiaTensor.m33 = 0;
+
+
+
+    }
+    void SetITSolidCone(float height, float radius)
+    {
+        //      |3/5mh^2 + 3/20mr^2                                  |
+        // I =  |                   3/5mh^2 + 3/20mr^2               |
+        //      |                                          3/10mr^2  |
+        localInertiaTensor.m00 = (3 / 5 * mass * (height * height)) + (3 / 20 * mass * (radius * radius));
+        localInertiaTensor.m11 = (3 / 5 * mass * (height * height)) + (3 / 20 * mass * (radius * radius));
+        localInertiaTensor.m22 = 3 / 10 * mass * (radius * radius);
+        localInertiaTensor.m33 = 0;
+
+
+
+    }
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         SetMass(startingMass);
-        particleVelocity = new Vector2(0.5f, 0);
-        frictionCoefficient = 0.5f;
-        vectorReflect = new Vector2(-Mathf.Sqrt(3) * 0.5f, 0.5f);
-//        vectorReflect = new Vector2( Mathf.Sqrt(3) * 0.5f, 0.5f);
-        fluidVelocity = new Vector2(1, 0);
-        fluidDensity = 1.0f;
-        objectArea_crossSection = 3.0f;
-        objectDragCoefficient = 0.5f;
-        anchorPosition = new Vector2(0, 0);
-        springRestingLength = 2.0f;
-        springStiffnessCoefficient = 5.0f;
+        
 
         inertia = 0f;
         appliedForce = new Vector2(1, 0);
-        w = 0;
-        x = 0;
-        y = 0;
-        z = 0;
+
         //normal = cos(direction), sin(direction)
     }
 
@@ -190,11 +249,15 @@ public class Particle3D : MonoBehaviour
         //normal
         // Step 1-3
         // Integrate
-        updatePositionExplicitEuler(Time.fixedDeltaTime);
+        //updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
-        //updateRotationEulerExplicit(Time.fixedDeltaTime);
+        updateRotationEulerExplicit(Time.fixedDeltaTime);
         //updateRotationKinematic(Time.fixedDeltaTime);
 
+        inverseInertia = 1 / inertia;
+
+
+        applyTorque(new Vector2(5, 3), appliedForce);
         // Step 2-2
         UpdateAcceleration();
 
@@ -203,7 +266,7 @@ public class Particle3D : MonoBehaviour
 
         //       // Apply to transform
         transform.position = position;
-        particlePosition = transform.position;
+        //particlePosition = transform.position;
         transform.rotation = newRotation;
         // transform.Rotate(0, 0, rotation);
 
