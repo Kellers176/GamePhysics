@@ -26,6 +26,7 @@ public class Particle3D : MonoBehaviour
     Matrix4x4 localInertiaTensor, worldInertiaTensor;
     //Matriox4x4.trs (transform, rotation, scale)
 
+    Matrix4x4 transformMat;
 
     public void SetMass(float newMass)
     {
@@ -84,12 +85,12 @@ public class Particle3D : MonoBehaviour
     {
         Matrix4x4 tempMat = new Matrix4x4();
         //tempMat = translation * rotation * scale;
-        tempMat = calcTranslationMat() * QuaternionToMatrix(newRotation) * calcScaleMat(transform.localScale);
+        tempMat = calcTransformMat() * QuaternionToMatrix(newRotation) * calcScaleMat(transform.localScale);
         return tempMat;
     }
 
     // calculate the translation matrix
-    Matrix4x4 calcTranslationMat()
+    Matrix4x4 calcTransformMat()
     {
         Matrix4x4 tempMat = new Matrix4x4();
         tempMat.m00 = 1;
@@ -170,6 +171,27 @@ public class Particle3D : MonoBehaviour
         return m;
     }
 
+    /// <summary>
+    /// Transforms the given vector by the transformatinal inverse of matrix : from the book
+    /// </summary>
+    /// <param name="vec"></param>
+    /// <returns></returns>
+    Vector3 transformInverse(Matrix4x4 mat, Vector3 vec)
+    {
+        Vector3 tmp = vec;
+
+        tmp.x -= mat[3];
+        tmp.y -= mat[7];
+        tmp.z -= mat[11];
+
+        return new Vector3(
+            tmp.x * mat[0] + tmp.y * mat[4] + tmp.z * mat[8],
+            tmp.x * mat[1] + tmp.y * mat[5] + tmp.z * mat[9],
+            tmp.x * mat[2] + tmp.y * mat[6] + tmp.z * mat[10]
+            );
+
+    }
+
     // Step 2-2
     Vector2 force;
     public void AddForce(Vector2 newForce)
@@ -248,7 +270,7 @@ public class Particle3D : MonoBehaviour
         // angularAccel = (objectWorldOrientation * inertiaTensorInverse * objectWorldOrientationInverse) * torque
         // do our world transform, multiply it by inverse inertia and then multiply that by inverse world and torque
         // localInertiaTensor needs to be inverse
-        angularAcceleration = (worldTransformationMatrix * localInertiaTensor.inverse * invWorldTransformationMatrix) * torque;
+        angularAcceleration = worldTransformationMatrix * localInertiaTensor * transformInverse(worldTransformationMatrix,torque);
     }
 
     void applyTorque(Vector3 force, Vector3 pointOfForce)
@@ -263,6 +285,51 @@ public class Particle3D : MonoBehaviour
         torque = Vector3.Cross(momentArm, pointOfForce);
     }
 
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        SetMass(startingMass);
+        
+
+        inertia = 0f;
+        appliedForce = new Vector2(1, 0);
+
+        //normal = cos(direction), sin(direction)
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        //normal
+        // Step 1-3
+        // Integrate
+        //updatePositionExplicitEuler(Time.fixedDeltaTime);
+        //updatePositionKinematic(Time.fixedDeltaTime);
+        updateRotationEulerExplicit(Time.fixedDeltaTime);
+        //updateRotationKinematic(Time.fixedDeltaTime);
+
+        inverseInertia = 1 / inertia;
+        SetITHollowBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        transformMat = calcTransformMat();
+        worldTransformationMatrix = calcWorldTransformMat();
+
+        applyTorque(new Vector2(5, 3), appliedForce);
+        // Step 2-2
+        updateAngularAcceleration();
+
+        //acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
+        //angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
+
+        //       // Apply to transform
+        transform.position = position;
+        //particlePosition = transform.position;
+        transform.rotation = newRotation;
+        // transform.Rotate(0, 0, rotation);
+
+    }
+
+
     void SetITSolidSphere(float scale)
     {
         //      |2/5mr^2                        |
@@ -275,10 +342,8 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m33 = 1;
 
 
-
-
         //change of basis: take our local torque, apply our tensor to it, move it back to world
-
+        //worldInertiaTensor = (localInertiaTensor, torque);
 
     }
     void SetITHollowSphere(float radius)
@@ -345,46 +410,5 @@ public class Particle3D : MonoBehaviour
     }
 
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetMass(startingMass);
-        
-
-        inertia = 0f;
-        appliedForce = new Vector2(1, 0);
-
-        //normal = cos(direction), sin(direction)
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        //normal
-        // Step 1-3
-        // Integrate
-        //updatePositionExplicitEuler(Time.fixedDeltaTime);
-        //updatePositionKinematic(Time.fixedDeltaTime);
-        updateRotationEulerExplicit(Time.fixedDeltaTime);
-        //updateRotationKinematic(Time.fixedDeltaTime);
-
-        inverseInertia = 1 / inertia;
-
-
-        applyTorque(new Vector2(5, 3), appliedForce);
-        // Step 2-2
-        UpdateAcceleration();
-
-        acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
-        angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
-
-        //       // Apply to transform
-        transform.position = position;
-        //particlePosition = transform.position;
-        transform.rotation = newRotation;
-        // transform.Rotate(0, 0, rotation);
-
-    }
 
 }

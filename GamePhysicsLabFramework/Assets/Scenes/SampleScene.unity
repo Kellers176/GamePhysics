@@ -329,11 +329,13 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   velocity: {x: 1, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
-  rotation: {x: 2, y: 2, z: 2, w: 1}
+  rotation: {x: 1, y: 1, z: 1, w: 1}
   angularVelocity: {x: 1, y: 0, z: 0}
   angularAcceleration: {x: 2, y: 0, z: 0}
   torque: {x: 0, y: 0, z: 0}
   startingMass: 5
+  inertia: 0
+  inverseInertia: 0
 --- !u!65 &2023087517
 BoxCollider:
   m_ObjectHideFlags: 0
