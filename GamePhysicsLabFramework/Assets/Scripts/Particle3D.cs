@@ -248,7 +248,7 @@ public class Particle3D : MonoBehaviour
     void calculateBoxInertia()
     {
         // I = 1/12m(dx^2 + dy^2)
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1.0f / 12.0f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void calculateDiskInertia()
     {
@@ -257,7 +257,7 @@ public class Particle3D : MonoBehaviour
     }
     void calculateSquareInertia()
     {
-        inertia = (1 / 12) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
+        inertia = (1.0f / 12.0f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
     void updateAngularAcceleration()
     {
@@ -270,7 +270,8 @@ public class Particle3D : MonoBehaviour
         // angularAccel = (objectWorldOrientation * inertiaTensorInverse * objectWorldOrientationInverse) * torque
         // do our world transform, multiply it by inverse inertia and then multiply that by inverse world and torque
         // localInertiaTensor needs to be inverse
-        angularAcceleration = worldTransformationMatrix * localInertiaTensor * transformInverse(worldTransformationMatrix,torque);
+        angularAcceleration = worldTransformationMatrix * worldInertiaTensor * transformInverse(worldTransformationMatrix,torque);
+        
     }
 
     void applyTorque(Vector3 force, Vector3 pointOfForce)
@@ -282,7 +283,7 @@ public class Particle3D : MonoBehaviour
         Vector2 momentArm = pointOfForce - position;
 
         //torque += (momentArm.x * force.y - momentArm.y * force.x);
-        torque = Vector3.Cross(momentArm, pointOfForce);
+        torque += Vector3.Cross(momentArm, pointOfForce);
     }
 
 
@@ -294,6 +295,9 @@ public class Particle3D : MonoBehaviour
 
         inertia = 0f;
         appliedForce = new Vector2(1, 0);
+
+
+        
 
         //normal = cos(direction), sin(direction)
     }
@@ -310,7 +314,7 @@ public class Particle3D : MonoBehaviour
         //updateRotationKinematic(Time.fixedDeltaTime);
 
         inverseInertia = 1 / inertia;
-        SetITHollowBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
         transformMat = calcTransformMat();
         worldTransformationMatrix = calcWorldTransformMat();
 
@@ -336,9 +340,9 @@ public class Particle3D : MonoBehaviour
         // I =  |           2/5mr^2             |
         //      |                       2/5mr^2 |
         //could be set in start
-        localInertiaTensor.m00 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
-        localInertiaTensor.m11 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
-        localInertiaTensor.m22 = 2 / 5 * mass * ((scale / 2) * (scale / 2));
+        localInertiaTensor.m00 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
+        localInertiaTensor.m11 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
+        localInertiaTensor.m22 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
         localInertiaTensor.m33 = 1;
 
 
@@ -351,9 +355,9 @@ public class Particle3D : MonoBehaviour
         //      |2/3mr^2                        |
         // I =  |           2/3mr^2             |
         //      |                       2/3mr^2 |
-        localInertiaTensor.m00 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
-        localInertiaTensor.m11 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
-        localInertiaTensor.m22 = 2 / 3 * mass * ((radius / 2) * (radius / 2));
+        localInertiaTensor.m00 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
+        localInertiaTensor.m11 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
+        localInertiaTensor.m22 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
         localInertiaTensor.m33 = 1;
 
     }
@@ -362,11 +366,16 @@ public class Particle3D : MonoBehaviour
         //      |1/12m(h^2 + d^2)                                       |
         // I =  |                   1/12m(d^2 + w^2)                    |
         //      |                                       1/12m(w^2 + h^2)|
-        localInertiaTensor.m00 = 1 / 12 * mass * ((height * height) + (depth * depth));
-        localInertiaTensor.m11 = 1 / 12 * mass * ((depth * depth) + (width * width));
-        localInertiaTensor.m22 = 1 / 12 * mass * ((width * width) + (height * height));
+        localInertiaTensor.m00 = 1.0f / 12.0f * mass * ((height * height) + (depth * depth));
+        localInertiaTensor.m11 = 1.0f / 12.0f * mass * ((depth * depth) + (width * width));
+        localInertiaTensor.m22 = 1.0f / 12.0f * mass * ((width * width) + (height * height));
         localInertiaTensor.m33 = 1;
 
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1 / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1 / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1 / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
 
 
     }
@@ -375,9 +384,9 @@ public class Particle3D : MonoBehaviour
         //      |5/3m(h^2 + d^2)                                       |
         // I =  |                   5/3m(d^2 + w^2)                    |
         //      |                                       5/3m(w^2 + h^2)|
-        localInertiaTensor.m00 = 5 / 3 * mass * ((height * height) + (depth * depth));
-        localInertiaTensor.m11 = 5 / 3 * mass * ((depth * depth) + (width * width));
-        localInertiaTensor.m22 = 5 / 3 * mass * ((width * width) + (height * height));
+        localInertiaTensor.m00 = 5.0f / 3.0f * mass * ((height * height) + (depth * depth));
+        localInertiaTensor.m11 = 5.0f / 3.0f * mass * ((depth * depth) + (width * width));
+        localInertiaTensor.m22 = 5.0f / 3.0f * mass * ((width * width) + (height * height));
         localInertiaTensor.m33 = 1;
 
 
@@ -387,9 +396,9 @@ public class Particle3D : MonoBehaviour
         //      |1/12m(3r^2 + h^2)                                  |
         // I =  |                   1/12m(3r^2 + h^2)               |
         //      |                                          1/2mr^2  |
-        localInertiaTensor.m00 = 1 / 12 * mass * ((3 * (radius * radius)) + (height * height));
-        localInertiaTensor.m11 = 1 / 12 * mass * ((3 * (radius * radius)) + (height * height));
-        localInertiaTensor.m22 = 1 / 2 * mass * (radius * radius);
+        localInertiaTensor.m00 = 1.0f / 12.0f * mass * ((3.0f * (radius * radius)) + (height * height));
+        localInertiaTensor.m11 = 1.0f / 12.0f * mass * ((3.0f * (radius * radius)) + (height * height));
+        localInertiaTensor.m22 = 1.0f / 2.0f * mass * (radius * radius);
         localInertiaTensor.m33 = 1;
 
 
@@ -400,9 +409,9 @@ public class Particle3D : MonoBehaviour
         //      |3/5mh^2 + 3/20mr^2                                  |
         // I =  |                   3/5mh^2 + 3/20mr^2               |
         //      |                                          3/10mr^2  |
-        localInertiaTensor.m00 = (3 / 5 * mass * (height * height)) + (3 / 20 * mass * (radius * radius));
-        localInertiaTensor.m11 = (3 / 5 * mass * (height * height)) + (3 / 20 * mass * (radius * radius));
-        localInertiaTensor.m22 = 3 / 10 * mass * (radius * radius);
+        localInertiaTensor.m00 = (3.0f / 5.0f * mass * (height * height)) + (3.0f / 20.0f * mass * (radius * radius));
+        localInertiaTensor.m11 = (3.0f / 5.0f * mass * (height * height)) + (3.0f / 20.0f * mass * (radius * radius));
+        localInertiaTensor.m22 = 3.0f / 10.0f * mass * (radius * radius);
         localInertiaTensor.m33 = 1;
 
 
