@@ -25,15 +25,15 @@ public class CollisionManager : MonoBehaviour
         {
             Debug.Log("This is a circle");
             //circle
-            if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsCircle(circle.GetComponent<CircleCollisionHull2D>()))
+            if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBox2D>()))
+            else if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<CircleCollisionHull2D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBox2D>()))
+            else if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
@@ -46,15 +46,15 @@ public class CollisionManager : MonoBehaviour
         {
             //AABB
             Debug.Log("This is a box");
-            if (this.GetComponent<AxisAlignedBoundingBox2D>().TestCollisionVsCircle(circle.GetComponent<CircleCollisionHull2D>()))
+            if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<AxisAlignedBoundingBox2D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBox2D>()))
+            else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<AxisAlignedBoundingBox2D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBox2D>()))
+            else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
@@ -65,15 +65,15 @@ public class CollisionManager : MonoBehaviour
 
             //OBB
             Debug.Log("This is a box");
-            if (this.GetComponent<ObjectBoundingBox2D>().TestCollisionVsCircle(circle.GetComponent<CircleCollisionHull2D>()))
+            if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<ObjectBoundingBox2D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBox2D>()))
+            else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }
-            else if (this.GetComponent<ObjectBoundingBox2D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBox2D>()))
+            else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
             }

@@ -19,7 +19,7 @@ public class Particle3D : MonoBehaviour
     public Vector3 appliedForce;
     public Vector3 forceVar;
 
-    Matrix4x4 worldTransformationMatrix;
+    public Matrix4x4 worldTransformationMatrix;
     Matrix4x4 invWorldTransformationMatrix;
 
     Vector3 localCenterOfMass, worldCenterOfMass;
@@ -83,14 +83,7 @@ public class Particle3D : MonoBehaviour
         return tempMat;
     }
 
-    // calculate the transform matrix
-    Matrix4x4 calcWorldTransformMat()
-    {
-        Matrix4x4 tempMat = new Matrix4x4();
-        //tempMat = translation * rotation * scale;
-        tempMat = calcTransformMat() * QuaternionToMatrix(newRotation) * calcScaleMat(transform.localScale);
-        return tempMat;
-    }
+
 
     // calculate the translation matrix
     Matrix4x4 calcTransformMat()
@@ -145,42 +138,6 @@ public class Particle3D : MonoBehaviour
         tempMat.m32 = 0;
         tempMat.m33 = 1;
         return tempMat;
-    }
-
-    Matrix4x4 setInverse(Matrix4x4 mat)
-    {
-        Matrix4x4 m = new Matrix4x4();
-        m.m00 = (mat.m11 * mat.m22) - (mat.m12 * mat.m21);
-        m.m01 = (mat.m02 * mat.m21) - (mat.m01 * mat.m22);
-        m.m02 = (mat.m01 * mat.m12) - (mat.m02 * mat.m11);
-        m.m03 = 0;
-        m.m10 = (mat.m12 * mat.m20) - (mat.m10 * mat.m22);
-        m.m11 = (mat.m00 * mat.m22) - (mat.m02 * mat.m20);
-        m.m12 = (mat.m02 * mat.m10) - (mat.m00 * mat.m12);
-        m.m13 = 0;
-        m.m20 = (mat.m10 * mat.m21) - (mat.m11 * mat.m20);
-        m.m21 = (mat.m01 * mat.m20) - (mat.m00 * mat.m21);
-        m.m22 = (mat.m00 * mat.m11) - (mat.m01 * mat.m10);
-        m.m23 = 0;
-        m.m30 = 0;
-        m.m31 = 0;
-        m.m32 = 0;
-        m.m33 = 1;
-        float det = (mat.m00 * mat.m11 * mat.m22) +
-                    (mat.m10 * mat.m21 * mat.m02) +
-                    (mat.m20 * mat.m01 * mat.m12) -
-                    (mat.m00 * mat.m21 * mat.m12) -
-                    (mat.m20 * mat.m11 * mat.m02) -
-                    (mat.m10 * mat.m01 * mat.m22);
-        Matrix4x4 deter = new Matrix4x4();
-        deter.m00 = deter.m01 = deter.m02 = deter.m10 =
-            deter.m11 = deter.m12 = deter.m20 = deter.m21 =
-            deter.m22 = (1 / det);
-        deter.m03 = deter.m13 = deter.m23 = deter.m30 = deter.m31
-            = deter.m32 = 0;
-        deter.m33 = 1;
-        m = m * deter;
-        return m;
     }
 
     /// <summary>
@@ -241,7 +198,7 @@ public class Particle3D : MonoBehaviour
         Quaternion temp;
         temp = multiplyQuatBy3DVec(angularVelocity, rotation);
 
-        Quaternion temp2 = multiplyQuatByScalar(0.5f, temp);
+        Quaternion temp2 = multiplyQuatByScalar(0.5f * dt, temp);
 
         newRotation = new Quaternion(rotation.x + temp2.x, rotation.y + temp2.y, rotation.z + temp2.z, rotation.w + temp2.w);
         Quaternion.Normalize(newRotation);
@@ -282,6 +239,7 @@ public class Particle3D : MonoBehaviour
         // angularAccel = (objectWorldOrientation * inertiaTensorInverse * objectWorldOrientationInverse) * torque
         // do our world transform, multiply it by inverse inertia and then multiply that by inverse world and torque
         // localInertiaTensor needs to be inverse
+        //change of basis
         angularAcceleration = worldTransformationMatrix * worldInertiaTensor * transformInverse(worldTransformationMatrix, torque);
         torque = Vector3.zero;
     }
@@ -308,7 +266,7 @@ public class Particle3D : MonoBehaviour
 
         inertia = 0f;
         appliedForce = new Vector3(1, 1, 0);
-        forceVar = new Vector3(3, 2, 1);
+        forceVar = new Vector3(0.3f, 0.2f, 0.1f);
 
 
 
@@ -334,15 +292,15 @@ public class Particle3D : MonoBehaviour
         ScaleMat = calcScaleMat(transform.localScale);
         worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
 
-        applyTorque(forceVar, appliedForce);
+        //applyTorque(forceVar, appliedForce);
         // Step 2-2
-        updateAngularAcceleration();
+        //updateAngularAcceleration();
 
         //acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
         //angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
 
         //       // Apply to transform
-        transform.position = position;
+        //transform.position = position;
         //particlePosition = transform.position;
         transform.rotation = newRotation;
         // transform.Rotate(0, 0, rotation);
@@ -364,6 +322,11 @@ public class Particle3D : MonoBehaviour
 
         //change of basis: take our local torque, apply our tensor to it, move it back to world
         //worldInertiaTensor = (localInertiaTensor, torque);
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
 
     }
     void SetITHollowSphere(float radius)
@@ -375,6 +338,12 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m11 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
         localInertiaTensor.m22 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
         localInertiaTensor.m33 = 1;
+
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
 
     }
     void SetITSolidBox(float height, float depth, float width)
@@ -405,6 +374,12 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m22 = 5.0f / 3.0f * mass * ((width * width) + (height * height));
         localInertiaTensor.m33 = 1;
 
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
+
 
     }
     void SetITSolidCylinder(float radius, float height)
@@ -416,6 +391,13 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m11 = 1.0f / 12.0f * mass * ((3.0f * (radius * radius)) + (height * height));
         localInertiaTensor.m22 = 1.0f / 2.0f * mass * (radius * radius);
         localInertiaTensor.m33 = 1;
+
+
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
 
 
 
@@ -430,7 +412,11 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m22 = 3.0f / 10.0f * mass * (radius * radius);
         localInertiaTensor.m33 = 1;
 
-
+        worldInertiaTensor = localInertiaTensor;
+        worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
+        worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
+        worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
+        worldInertiaTensor.m33 = 1;
 
     }
 
