@@ -63,24 +63,24 @@ public class CollisionManager : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
             }
 
-            //OBB
-            Debug.Log("This is a box");
-            if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-            }
+ //           //OBB
+ //           Debug.Log("This is a box");
+ //           if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
+ //           {
+ //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+ //           }
+ //           else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
+ //           {
+ //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+ //           }
+ //           else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
+ //           {
+ //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+ //           }
+ //           else
+ //           {
+ //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+ //           }
         }
 
     }
