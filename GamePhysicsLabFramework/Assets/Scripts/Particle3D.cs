@@ -28,7 +28,7 @@ public class Particle3D : MonoBehaviour
     //Matriox4x4.trs (transform, rotation, scale)
 
     Matrix4x4 transformMat;
-    Matrix4x4 RotationMat;
+    public Matrix4x4 RotationMat;
     Matrix4x4 ScaleMat;
 
     public void SetMass(float newMass)

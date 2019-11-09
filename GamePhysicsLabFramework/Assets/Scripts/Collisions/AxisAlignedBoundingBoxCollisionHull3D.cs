@@ -116,6 +116,18 @@ public class AxisAlignedBoundingBoxCollisionHull3D : CollisionHull3D
             Vector2 rotationA = new Vector2(Mathf.Cos(-(other.transform.eulerAngles.y)), -Mathf.Sin(-(other.transform.eulerAngles.y)));
             Vector2 rotationB = new Vector2(Mathf.Sin(-(other.transform.eulerAngles.y)), Mathf.Cos(-(other.transform.eulerAngles.y)));
 
+            //     |1           0           0       |
+            //Qx = |0       cos(theta)   -sin(theta)|
+            //     |0       sin(theta)   cos(theta) |
+
+            //     |cos(theta)      0        sin(theta) |
+            //Qy = |0               1           0       |
+            //     |-sin(theta)     0        cos(theta) |
+
+            //     |cos(theta)      -sin(theta)     0 |
+            //Qz = |sin(theta)      cos(theta)      0 |
+            //     |0                   0           1 |
+
             //multiply by max extents
             //matrix
 

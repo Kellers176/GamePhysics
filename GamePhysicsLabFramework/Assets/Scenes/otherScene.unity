@@ -275,6 +275,23 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 0
+  RotationMat:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
 --- !u!65 &138298515
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -421,6 +438,23 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 0
+  RotationMat:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
 --- !u!135 &600854918
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -508,6 +542,7 @@ GameObject:
   - component: {fileID: 644123377}
   - component: {fileID: 644123376}
   - component: {fileID: 644123375}
+  - component: {fileID: 644123381}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -615,6 +650,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &644123381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644123374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd2a081d3f28af489b845884aa49e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0}
+  acceleration: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 0}
+  angularVelocity: {x: 0, y: 0, z: 0}
+  angularAcceleration: {x: 0, y: 0, z: 0}
+  torque: {x: 0, y: 0, z: 0}
+  startingMass: 0
+  appliedForce: {x: 0, y: 0, z: 0}
+  forceVar: {x: 0, y: 0, z: 0}
+  worldTransformationMatrix:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  RotationMat:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
 --- !u!1 &688163092
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,6 +762,23 @@ MonoBehaviour:
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  RotationMat:
     e00: 0
     e01: 0
     e02: 0
@@ -924,6 +1032,23 @@ MonoBehaviour:
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  RotationMat:
     e00: 0
     e01: 0
     e02: 0
