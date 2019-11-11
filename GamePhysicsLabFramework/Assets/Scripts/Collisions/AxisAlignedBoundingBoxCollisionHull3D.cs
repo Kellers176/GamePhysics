@@ -144,8 +144,6 @@ public class AxisAlignedBoundingBoxCollisionHull3D : CollisionHull3D
             {
                 return true;
             }
-            return false;
-
         }
         return false;
     }

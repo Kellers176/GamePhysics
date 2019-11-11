@@ -45,42 +45,48 @@ public class CollisionManager : MonoBehaviour
         else if (gameObject.GetComponent<MeshFilter>().mesh.name == "Cube Instance")
         {
             //AABB
-            Debug.Log("This is a box");
-            if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
+            if (gameObject.name == "Cube")
             {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-            }
-            else
-            {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                Debug.Log("This is a box");
+                if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else if (this.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                }
             }
 
- //           //OBB
- //           Debug.Log("This is a box");
- //           if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
- //           {
- //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
- //           }
- //           else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
- //           {
- //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
- //           }
- //           else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
- //           {
- //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
- //           }
- //           else
- //           {
- //               this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
- //           }
+            //OBB
+            if (gameObject.name == "OBBCube")
+            {
+                Debug.Log("This is a box");
+                if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsSphere(circle.GetComponent<SphereCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsAABB(AABB.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else if (this.GetComponent<ObjectBoundingBoxCollisionHull3D>().TestCollisionVsOBB(OBB.GetComponent<ObjectBoundingBoxCollisionHull3D>()))
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                }
+                else
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                }
+            }
         }
 
     }
