@@ -27,6 +27,12 @@ public class ObjectBoundingBoxCollisionHull3D : CollisionHull3D
         float minX = this.transform.position.x - (this.transform.localScale.x * 0.5f);
         float maxX = this.transform.position.x + (this.transform.localScale.x * 0.5f);
 
+        float minZ = other.transform.position.z - (other.transform.localScale.z * 0.5f);
+        float maxZ = other.transform.position.z + (other.transform.localScale.z * 0.5f);
+
+        float nearestX = Mathf.Clamp(this.transform.position.x, minX, maxX);
+        float nearestY = Mathf.Clamp(this.transform.position.y, minY, maxY);
+        float nearestZ = Mathf.Clamp(this.transform.position.z, minZ, maxZ);
 
         //do stuff
         //multiply by the inverse matrix
@@ -36,17 +42,15 @@ public class ObjectBoundingBoxCollisionHull3D : CollisionHull3D
 
         position = this.transform.worldToLocalMatrix.MultiplyVector(other.transform.position);
 
-        float nearestX = Mathf.Clamp(position.x, minX, maxX);
-        float nearestY = Mathf.Clamp(position.y, minY, maxY);
-
 
         //check whether point is within circle
-        if (TestPoint(radius, nearestX, nearestY, position))
+        if (TestPoint3D(radius, nearestX, nearestY, nearestZ, this.transform.position))
         {
             return true;
         }
 
         return false;
+        
     }
 
     public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxCollisionHull3D other)
@@ -198,6 +202,20 @@ public class ObjectBoundingBoxCollisionHull3D : CollisionHull3D
         //(xp,yp) = (nearX, nearY)
         // (xc,yc) = (circleCenter.x, circleCenter.y)
         float distance = Mathf.Sqrt(((nearX - centerCircle.x) * (nearX - centerCircle.x)) + ((nearY - centerCircle.y) * (nearY - centerCircle.y)));
+
+        if (distance < radius)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool TestPoint3D(float radius, float nearX, float nearY, float nearZ, Vector3 centerCircle)
+    {
+        //(xp,yp) = (nearX, nearY)
+        // (xc,yc) = (circleCenter.x, circleCenter.y)
+        float distance = Mathf.Sqrt(((nearX - centerCircle.x) * (nearX - centerCircle.x)) + ((nearY - centerCircle.y) * (nearY - centerCircle.y)) + ((nearZ - centerCircle.z) * (nearZ - centerCircle.z)));
 
         if (distance < radius)
         {
