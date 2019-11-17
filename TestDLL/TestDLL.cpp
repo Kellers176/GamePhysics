@@ -1,23 +1,25 @@
 #include "TestDLL.h"
 #include "Foo.h"
 
-Foo* inst = 0;
+#include "Particle2D.h"
 
-int InitFoo(int f_new)
+Particle2D* inst = 0;
+
+int InitParticle2D()
 {
 	if (!inst)
 	{
-		inst = new Foo(f_new);
+		inst = new Particle2D();
 		return 1;
 	}
 	return 0;
 }
 
-int DoFoo(int bar)
+int DoParticle2D()
 {
 	if (inst)
 	{
-		int result = inst->foo(bar);
+		int result = inst->GetMass();
 		return result;
 	}
 	return 0;

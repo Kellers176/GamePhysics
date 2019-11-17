@@ -9,8 +9,8 @@ extern "C"
 #else // !__cplusplus
 #endif
 
-TESTDLL_SYMBOL int InitFoo(int f_new);
-TESTDLL_SYMBOL int DoFoo(int bar);
+TESTDLL_SYMBOL int InitParticle2D();
+TESTDLL_SYMBOL int DoParticle2D();
 TESTDLL_SYMBOL int TermFoo();
 
 #ifdef __cplusplus

@@ -267,8 +267,8 @@ public class Particle3D : MonoBehaviour
         inertia = 0f;
         appliedForce = new Vector3(1, 1, 0);
         forceVar = new Vector3(0.3f, 0.2f, 0.1f);
-
-
+        TestDLLScript.InitParticle2D();
+        Debug.Log(TestDLLScript.DoParticle2D());
 
         //normal = cos(direction), sin(direction)
     }
