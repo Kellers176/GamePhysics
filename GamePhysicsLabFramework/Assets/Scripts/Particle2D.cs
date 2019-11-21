@@ -75,7 +75,7 @@ public class Particle2D : MonoBehaviour
 
         velocity += acceleration * dt;
     }
-    void updateRotationEulerExplicit(float dt)
+    void UpdateRotationExplicitEuler(float dt)
     {
         rotation += angularVelocity * dt;
         angularVelocity += angularAcceleration * dt;

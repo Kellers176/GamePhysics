@@ -261,14 +261,16 @@ public class Particle3D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetMass(startingMass);
+        TestDLLScript.InitParticle2D();
+        TestDLLScript.SetMass(startingMass);
+        //SetMass(startingMass);
         
 
         inertia = 0f;
         appliedForce = new Vector3(1, 1, 0);
         forceVar = new Vector3(0.3f, 0.2f, 0.1f);
-        TestDLLScript.InitParticle2D();
-        Debug.Log(TestDLLScript.DoParticle2D());
+        
+        Debug.Log(TestDLLScript.GetMass());
 
         //normal = cos(direction), sin(direction)
     }
@@ -279,28 +281,28 @@ public class Particle3D : MonoBehaviour
         //normal
         // Step 1-3
         // Integrate
-        //updatePositionExplicitEuler(Time.fixedDeltaTime);
-        //updatePositionKinematic(Time.fixedDeltaTime);
-        updateRotationEulerExplicit(Time.fixedDeltaTime);
-        //updateRotationKinematic(Time.fixedDeltaTime);
+        TestDLLScript.UpdatePositionExplicitEuler(Time.fixedDeltaTime);
+        //TestDLLScript.UpdatePositionKinematic(Time.fixedDeltaTime);
+        TestDLLScript.UpdateRotationExplicitEuler(Time.fixedDeltaTime);
+        //TestDLLScript.UpdateRotationKinematic(Time.fixedDeltaTime);
 
-        inverseInertia = 1 / inertia;
-        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
-        transformMat = calcTransformMat();
-        RotationMat = QuaternionToMatrix(newRotation);
-        Debug.Log(newRotation);
-        ScaleMat = calcScaleMat(transform.localScale);
-        worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
+        //inverseInertia = 1 / inertia;
+        //SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        //transformMat = calcTransformMat();
+        //RotationMat = QuaternionToMatrix(newRotation);
+        //Debug.Log(newRotation);
+        //ScaleMat = calcScaleMat(transform.localScale);
+        //worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
 
         //applyTorque(forceVar, appliedForce);
         // Step 2-2
-        //updateAngularAcceleration();
+        updateAngularAcceleration();
 
-        //acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
-        //angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
+        acceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f, 0, 0);
+        angularAcceleration = new Vector3(-Mathf.Sin(Time.fixedTime) * 5f,0,0);
 
         //       // Apply to transform
-        //transform.position = position;
+        transform.position = position;
         //particlePosition = transform.position;
         transform.rotation = newRotation;
         // transform.Rotate(0, 0, rotation);

@@ -10,8 +10,15 @@ extern "C"
 #endif
 
 TESTDLL_SYMBOL int InitParticle2D();
-TESTDLL_SYMBOL int DoParticle2D();
-TESTDLL_SYMBOL int TermFoo();
+TESTDLL_SYMBOL float GetMass();
+TESTDLL_SYMBOL int SetMass(float newMass);
+TESTDLL_SYMBOL int AddForce(float newForceX, float newForceY, float newForceZ);
+TESTDLL_SYMBOL int UpdateAcceleration();
+TESTDLL_SYMBOL int UpdatePositionExplicitEuler(float dt);
+TESTDLL_SYMBOL int UpdatePositionKinematic(float dt);
+TESTDLL_SYMBOL int UpdateRotationExplicitEuler(float dt);
+TESTDLL_SYMBOL int UpdateRotationKinematic(float dt);
+TESTDLL_SYMBOL int TermParticle2D();
 
 #ifdef __cplusplus
 }

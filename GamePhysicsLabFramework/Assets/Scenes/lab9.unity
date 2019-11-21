@@ -244,13 +244,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
+  velocity: {x: 1, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  angularVelocity: {x: 0, y: 0, z: 0}
-  angularAcceleration: {x: 0, y: 0, z: 0}
+  rotation: {x: 1, y: 1, z: 1, w: 1}
+  angularVelocity: {x: 1, y: 0, z: 0}
+  angularAcceleration: {x: 2, y: 0, z: 0}
   torque: {x: 0, y: 0, z: 0}
-  startingMass: 0
+  startingMass: 5
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:

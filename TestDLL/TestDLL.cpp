@@ -15,7 +15,7 @@ int InitParticle2D()
 	return 0;
 }
 
-int DoParticle2D()
+float GetMass()
 {
 	if (inst)
 	{
@@ -25,7 +25,77 @@ int DoParticle2D()
 	return 0;
 }
 
-int TermFoo()
+int SetMass(float newMass)
+{
+	if (inst)
+	{
+		inst->SetMass(newMass);
+		return 1;
+	}
+	return 0;
+}
+
+int AddForce(float newForceX, float newForceY, float newForceZ)
+{
+	if (inst)
+	{
+		inst->AddForce(Vector3(newForceX, newForceY, newForceZ));
+		return 1;
+	}
+	return 0;
+}
+
+int UpdateAcceleration()
+{
+	if (inst)
+	{
+		inst->UpdateAcceleration();
+		return 1;
+	}
+	return 0;
+}
+
+int UpdatePositionExplicitEuler(float dt)
+{
+	if (inst)
+	{
+		inst->UpdatePositionExplicitEuler(dt);
+		return 1;
+	}
+	return 0;
+}
+
+int UpdatePositionKinematic(float dt)
+{
+	if (inst)
+	{
+		inst->updatePositionKinematic(dt);
+		return 1;
+	}
+	return 0;
+}
+
+int UpdateRotationExplicitEuler(float dt)
+{
+	if (inst)
+	{
+		inst->UpdateRotationExplicitEuler(dt);
+		return 1;
+	}
+	return 0;
+}
+
+int UpdateRotationKinematic(float dt)
+{
+	if (inst)
+	{
+		inst->UpdateRotationKinematic(dt);
+		return 1;
+	}
+	return 0;
+}
+
+int TermParticle2D()
 {
 	if (inst)
 	{

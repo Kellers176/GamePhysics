@@ -47,7 +47,6 @@ void Particle2D::UpdatePositionExplicitEuler(float dt)
 	// v(t+dt) = v(t) + a(t)dt
 	velocity = velocity.Add(acceleration.Multiply(dt));
 	//velocity += acceleration * dt;
-
 }
 
 //ignore this for rn

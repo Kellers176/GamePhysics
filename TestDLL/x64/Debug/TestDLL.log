@@ -1,2 +1,13 @@
-﻿  Vector3.cpp
-  TestDLL.vcxproj -> C:\Users\Kelly.Herstine\Desktop\GamePhysics\TestDLL\x64\Debug\TestDLL.dll
+﻿  stdafx.cpp
+  dllmain.cpp
+  Foo.cpp
+  Particle2D.cpp
+  TestDLL.cpp
+D:\GamePhysics\Repo\TestDLL\Particle2D.cpp(18,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\GamePhysics\Repo\TestDLL\TestDLL.cpp(22,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Vector3.cpp
+  Generating Code...
+D:\GamePhysics\Repo\TestDLL\TestDLL.cpp(23,10): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+  LINK : D:\GamePhysics\Repo\TestDLL\x64\Debug\TestDLL.dll not found or not built by the last incremental link; performing full link
+     Creating library D:\GamePhysics\Repo\TestDLL\x64\Debug\TestDLL.lib and object D:\GamePhysics\Repo\TestDLL\x64\Debug\TestDLL.exp
+  TestDLL.vcxproj -> D:\GamePhysics\Repo\TestDLL\x64\Debug\TestDLL.dll
