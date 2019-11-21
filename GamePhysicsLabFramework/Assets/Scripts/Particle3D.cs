@@ -84,62 +84,6 @@ public class Particle3D : MonoBehaviour
     }
 
 
-
-    // calculate the translation matrix
-    Matrix4x4 calcTransformMat()
-    {
-        Matrix4x4 tempMat = new Matrix4x4(
-            new Vector4(1.0f, 0.0f, 0.0f, 0.0f),
-            new Vector4(0.0f, 1.0f, 0.0f, 0.0f),
-            new Vector4(0.0f, 0.0f, 1.0f, 0.0f),
-            new Vector4(position.x, position.y, position.z, 1.0f)
-            );
-        //tempMat.m00 = 1;
-        //tempMat.m01 = 0;
-        //tempMat.m02 = 0;
-        //tempMat.m03 = 0;
-        //tempMat.m10 = 0;
-        //tempMat.m11 = 1;
-        //tempMat.m12 = 0;
-        //tempMat.m13 = 0;
-        //tempMat.m20 = 0;
-        //tempMat.m21 = 0;
-        //tempMat.m22 = 1;
-        //tempMat.m23 = 0;
-        //tempMat.m30 = position.x;
-        //tempMat.m31 = position.y;
-        //tempMat.m32 = position.z;
-        //tempMat.m33 = 1;
-
-
-
-
-        return tempMat;
-    }
-
-    // calculate the scale matrix
-    Matrix4x4 calcScaleMat(Vector3 scale)
-    {
-        Matrix4x4 tempMat = new Matrix4x4();
-        tempMat.m00 = scale.x;
-        tempMat.m01 = 0;
-        tempMat.m02 = 0;
-        tempMat.m03 = 0;
-        tempMat.m10 = 0;
-        tempMat.m11 = scale.y;
-        tempMat.m12 = 0;
-        tempMat.m13 = 0;
-        tempMat.m20 = 0;
-        tempMat.m21 = 0;
-        tempMat.m22 = scale.z;
-        tempMat.m23 = 0;
-        tempMat.m30 = 0;
-        tempMat.m31 = 0;
-        tempMat.m32 = 0;
-        tempMat.m33 = 1;
-        return tempMat;
-    }
-
     /// <summary>
     /// Transforms the given vector by the transformatinal inverse of matrix : from the book
     /// </summary>
@@ -198,10 +142,10 @@ public class Particle3D : MonoBehaviour
         Quaternion temp;
         temp = multiplyQuatBy3DVec(angularVelocity, rotation);
 
-        Quaternion temp2 = multiplyQuatByScalar(0.5f * dt, temp);
+        Quaternion temp2 = multiplyQuatByScalar(0.5f, temp);
 
         newRotation = new Quaternion(rotation.x + temp2.x, rotation.y + temp2.y, rotation.z + temp2.z, rotation.w + temp2.w);
-        Quaternion.Normalize(newRotation);
+        newRotation = Quaternion.Normalize(newRotation);
 
         angularVelocity += angularAcceleration * dt;
     }
@@ -286,12 +230,15 @@ public class Particle3D : MonoBehaviour
 
         inverseInertia = 1 / inertia;
         SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
-        transformMat = calcTransformMat();
         RotationMat = QuaternionToMatrix(newRotation);
         Debug.Log(newRotation);
-        ScaleMat = calcScaleMat(transform.localScale);
-        worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
-
+        //worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
+        worldTransformationMatrix = new Matrix4x4(
+            new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
+            new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
+            new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
+            new Vector4(0,0,0,1)
+            );
         //applyTorque(forceVar, appliedForce);
         // Step 2-2
         //updateAngularAcceleration();
@@ -317,7 +264,6 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
         localInertiaTensor.m11 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
         localInertiaTensor.m22 = 2.0f / 5.0f * mass * ((scale / 2.0f) * (scale / 2.0f));
-        localInertiaTensor.m33 = 1;
 
 
         //change of basis: take our local torque, apply our tensor to it, move it back to world
@@ -326,7 +272,6 @@ public class Particle3D : MonoBehaviour
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
     }
     void SetITHollowSphere(float radius)
@@ -337,13 +282,11 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
         localInertiaTensor.m11 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
         localInertiaTensor.m22 = 2.0f / 3.0f * mass * ((radius / 2.0f) * (radius / 2.0f));
-        localInertiaTensor.m33 = 1;
 
         worldInertiaTensor = localInertiaTensor;
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
     }
     void SetITSolidBox(float height, float depth, float width)
@@ -354,13 +297,11 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = 1.0f / 12.0f * mass * ((height * height) + (depth * depth));
         localInertiaTensor.m11 = 1.0f / 12.0f * mass * ((depth * depth) + (width * width));
         localInertiaTensor.m22 = 1.0f / 12.0f * mass * ((width * width) + (height * height));
-        localInertiaTensor.m33 = 1;
 
         worldInertiaTensor = localInertiaTensor;
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
 
     }
@@ -372,13 +313,11 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = 5.0f / 3.0f * mass * ((height * height) + (depth * depth));
         localInertiaTensor.m11 = 5.0f / 3.0f * mass * ((depth * depth) + (width * width));
         localInertiaTensor.m22 = 5.0f / 3.0f * mass * ((width * width) + (height * height));
-        localInertiaTensor.m33 = 1;
 
         worldInertiaTensor = localInertiaTensor;
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
 
     }
@@ -390,14 +329,12 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = 1.0f / 12.0f * mass * ((3.0f * (radius * radius)) + (height * height));
         localInertiaTensor.m11 = 1.0f / 12.0f * mass * ((3.0f * (radius * radius)) + (height * height));
         localInertiaTensor.m22 = 1.0f / 2.0f * mass * (radius * radius);
-        localInertiaTensor.m33 = 1;
 
 
         worldInertiaTensor = localInertiaTensor;
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
 
 
@@ -410,13 +347,11 @@ public class Particle3D : MonoBehaviour
         localInertiaTensor.m00 = (3.0f / 5.0f * mass * (height * height)) + (3.0f / 20.0f * mass * (radius * radius));
         localInertiaTensor.m11 = (3.0f / 5.0f * mass * (height * height)) + (3.0f / 20.0f * mass * (radius * radius));
         localInertiaTensor.m22 = 3.0f / 10.0f * mass * (radius * radius);
-        localInertiaTensor.m33 = 1;
 
         worldInertiaTensor = localInertiaTensor;
         worldInertiaTensor.m00 = 1.0f / localInertiaTensor.m00;
         worldInertiaTensor.m11 = 1.0f / localInertiaTensor.m11;
         worldInertiaTensor.m22 = 1.0f / localInertiaTensor.m22;
-        worldInertiaTensor.m33 = 1;
 
     }
 
