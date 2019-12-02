@@ -239,7 +239,7 @@ public class Particle3D : MonoBehaviour
             new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
             new Vector4(0,0,0,1)
             );
-        //applyTorque(forceVar, appliedForce);
+        applyTorque(forceVar, appliedForce);
         // Step 2-2
         //updateAngularAcceleration();
 
