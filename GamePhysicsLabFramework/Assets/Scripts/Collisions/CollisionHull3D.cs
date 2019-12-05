@@ -53,9 +53,9 @@ public abstract class CollisionHull3D : MonoBehaviour
                 // if is Player Ball
                 // if a.particle.mass = PlayerBallMass
                 // else if b.particle.mass = PlayerBallMass
-                a.particle.SetPositionX(a.transform.position.x - contactHit.collisionDepth.x);
-                a.particle.SetPositionY(a.transform.position.y - contactHit.collisionDepth.y);
-                a.particle.SetPositionZ(a.transform.position.z - contactHit.collisionDepth.z);
+//                a.particle.SetPositionX(a.transform.position.x - contactHit.collisionDepth.x);
+//                a.particle.SetPositionY(a.transform.position.y - contactHit.collisionDepth.y);
+//                a.particle.SetPositionZ(a.transform.position.z - contactHit.collisionDepth.z);
             }
         }
     }

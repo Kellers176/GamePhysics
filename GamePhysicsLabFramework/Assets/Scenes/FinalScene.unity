@@ -871,7 +871,7 @@ GameObject:
   - component: {fileID: 368152716}
   m_Layer: 0
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1161,7 +1161,7 @@ GameObject:
   - component: {fileID: 637747849}
   m_Layer: 0
   m_Name: Hole (3)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1742,7 +1742,7 @@ Transform:
   m_LocalScale: {x: 11.697, y: 0.21451, z: 11.697}
   m_Children: []
   m_Father: {fileID: 1259410868}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &975481398
 BoxCollider:
@@ -1910,7 +1910,7 @@ GameObject:
   - component: {fileID: 1017906777}
   m_Layer: 0
   m_Name: Hole (6)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2197,9 +2197,9 @@ GameObject:
   - component: {fileID: 1152534595}
   - component: {fileID: 1152534594}
   - component: {fileID: 1152534593}
-  - component: {fileID: 1152534592}
   - component: {fileID: 1152534591}
   - component: {fileID: 1152534590}
+  - component: {fileID: 1152534592}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2219,9 +2219,44 @@ Transform:
   m_LocalScale: {x: 0.7758554, y: 1.5516796, z: 0.7758554}
   m_Children: []
   m_Father: {fileID: 1259410868}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1152534590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152534588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3a60cae027f844bb4ce66ac97eaad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.5
+--- !u!114 &1152534591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152534588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1883a5204ce1d954ebc338e0620862b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circle:
+  - {fileID: 368152714}
+  - {fileID: 1899270294}
+  - {fileID: 1796280575}
+  - {fileID: 637747847}
+  - {fileID: 1185886067}
+  - {fileID: 1186768640}
+  - {fileID: 1017906775}
+  - {fileID: 1960040220}
+  startPosition: {fileID: 1195581009}
+--- !u!114 &1152534592
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2277,34 +2312,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 0
---- !u!114 &1152534591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1152534588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3a60cae027f844bb4ce66ac97eaad1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.5
---- !u!114 &1152534592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1152534588}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e42afd063db822f49973d01685d41a79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  circle: {fileID: 0}
-  AABB: {fileID: 0}
-  OBB: {fileID: 0}
 --- !u!135 &1152534593
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2379,7 +2386,7 @@ GameObject:
   - component: {fileID: 1185886069}
   m_Layer: 0
   m_Name: Hole (4)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2485,7 +2492,7 @@ GameObject:
   - component: {fileID: 1186768642}
   m_Layer: 0
   m_Name: Hole (5)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2576,6 +2583,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186768640}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1195581008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1195581009}
+  m_Layer: 0
+  m_Name: StartTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1195581009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195581008}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.845298, y: -1.0537254, z: -0.070779}
+  m_LocalScale: {x: 0.7758554, y: 1.5516796, z: 0.7758554}
+  m_Children: []
+  m_Father: {fileID: 1259410868}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1223752121
 GameObject:
   m_ObjectHideFlags: 0
@@ -2800,6 +2837,7 @@ Transform:
   m_LocalPosition: {x: 0.3451042, y: 2.429087, z: -6.338773}
   m_LocalScale: {x: 1.2889, y: 0.64446294, z: 1.2889}
   m_Children:
+  - {fileID: 1195581009}
   - {fileID: 975481397}
   - {fileID: 1914674066}
   - {fileID: 1365140748}
@@ -3056,7 +3094,7 @@ Transform:
   - {fileID: 682009523}
   - {fileID: 949756252}
   m_Father: {fileID: 1259410868}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1398846366
 GameObject:
@@ -3717,7 +3755,7 @@ GameObject:
   - component: {fileID: 1796280577}
   m_Layer: 0
   m_Name: Hole (2)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4283,7 +4321,7 @@ GameObject:
   - component: {fileID: 1899270296}
   m_Layer: 0
   m_Name: Hole (1)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4502,7 +4540,7 @@ Transform:
   - {fileID: 1017906776}
   - {fileID: 1960040221}
   m_Father: {fileID: 1259410868}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1952942636
 GameObject:
@@ -4602,7 +4640,7 @@ GameObject:
   - component: {fileID: 1960040222}
   m_Layer: 0
   m_Name: Hole (7)
-  m_TagString: Untagged
+  m_TagString: Death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
