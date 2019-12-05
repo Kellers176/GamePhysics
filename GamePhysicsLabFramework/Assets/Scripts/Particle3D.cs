@@ -10,6 +10,8 @@ public class Particle3D : MonoBehaviour
     Quaternion newRotation;
     public Vector3 angularVelocity, angularAcceleration, torque;
 
+
+    Vector3 vectorReflect;
     // Step 2-1
     public float startingMass;
     float mass, massInv;
@@ -219,8 +221,8 @@ public class Particle3D : MonoBehaviour
     void Start()
     {
         SetMass(startingMass);
-        
 
+        vectorReflect = new Vector3(-Mathf.Sqrt(3) * 0.5f, 0.5f, 0.5f);
         inertia = 0f;
         appliedForce = new Vector3(0, 1, 0);
         forceVar = new Vector3(0.3f, 0.2f, 0.1f);
@@ -233,28 +235,46 @@ public class Particle3D : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //normal
-        // Step 1-3
-        // Integrate
+
         updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
-        //       updateRotationEulerExplicit(Time.fixedDeltaTime);
+        //updateRotationEulerExplicit(Time.fixedDeltaTime);
         //updateRotationKinematic(Time.fixedDeltaTime);
 
+        // Step 2-2
         UpdateAcceleration();
 
-//        inverseInertia = 1 / inertia;
-//        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
-//        RotationMat = QuaternionToMatrix(newRotation);
-//        Debug.Log(newRotation);
-//        worldTransformationMatrix = new Matrix4x4(
-//            new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
-//            new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
-//            new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
-//            new Vector4(0,0,0,1)
-//            );
-//        applyTorque(forceVar, appliedForce);
-//        transform.rotation = newRotation;
+
+        // Apply to transform
+        transform.position = position;
+ //       particlePosition = transform.position;
+        // transform.Rotate(0, 0, rotation);
+
+        // Step 1-4
+        // test
+        // acceleration.x = -Mathf.Sin(Time.fixedTime);
+        // angularAcceleration = -Mathf.Sin(Time.fixedTime);
+
+        // Step 2-2
+        // f_gravity: f = mg
+        Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
+        AddForce(f_gravity);
+        Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+        Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
+
+
+        //        inverseInertia = 1 / inertia;
+        //        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        //        RotationMat = QuaternionToMatrix(newRotation);
+        //        Debug.Log(newRotation);
+        //        worldTransformationMatrix = new Matrix4x4(
+        //            new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
+        //            new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
+        //            new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
+        //            new Vector4(0,0,0,1)
+        //            );
+        //        applyTorque(forceVar, appliedForce);
+        //        transform.rotation = newRotation;
 
     }
 
