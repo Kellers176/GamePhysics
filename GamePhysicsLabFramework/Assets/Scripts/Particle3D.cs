@@ -120,6 +120,19 @@ public class Particle3D : MonoBehaviour
         force.Set(0.0f, 0.0f);
     }
 
+    void SetPositionX(float posX)
+    {
+        position.x = posX;
+    }
+    void SetPositionY(float posY)
+    {
+        position.y = posY;
+    }
+    void SetPositionZ(float posZ)
+    {
+        position.z = posZ;
+    }
+
     // Step 1-2
     void updatePositionExplicitEuler(float dt)
     {
