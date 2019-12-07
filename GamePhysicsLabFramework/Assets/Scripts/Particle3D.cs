@@ -187,6 +187,15 @@ public class Particle3D : MonoBehaviour
     {
         inertia = (1.0f / 12.0f) * mass * ((transform.localScale.x * transform.localScale.x) + (transform.localScale.y * transform.localScale.y));
     }
+    public void SetPosition(Vector3 newPos)
+    {
+        position = newPos;
+    }
+    public void ResetInfo()
+    {
+        acceleration = Vector3.zero;
+        velocity = Vector3.zero;
+    }
     void updateAngularAcceleration()
     {
         //converts torque to angular acceleration
@@ -246,7 +255,7 @@ public class Particle3D : MonoBehaviour
 
 
         // Apply to transform
-        //transform.position = position;
+        transform.position = position;
  //       particlePosition = transform.position;
         // transform.Rotate(0, 0, rotation);
 
