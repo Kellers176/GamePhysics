@@ -114,6 +114,8 @@ public class SphereCollisionHull3D : CollisionHull3D
         //multiply by the inverse matrix
 
         Vector3 position;
+        //position = other.GetComponent<Particle3D>().worldTransformationMatrix.MultiplyVector(this.transform.position);
+        //position = other.transform.worldToLocalMatrix.MultiplyVector(this.transform.position);
         position = other.GetComponent<Particle3D>().worldTransformationMatrix.MultiplyVector(this.transform.position);
 
 

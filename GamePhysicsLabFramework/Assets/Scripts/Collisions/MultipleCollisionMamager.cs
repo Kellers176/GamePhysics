@@ -7,9 +7,10 @@ public class MultipleCollisionMamager : MonoBehaviour
     // Start is called before the first frame update
     public GameObject[] circle;
     public Transform startPosition;
+    public GameObject[] walls;
     //public GameObject AABB;
     //public GameObject OBB;
-    bool colliding = false;
+    //bool colliding = false;
 
 
     void Start()
@@ -27,7 +28,19 @@ public class MultipleCollisionMamager : MonoBehaviour
             {
                 if (circle[i].gameObject.tag == "Death")
                     this.transform.position = startPosition.position;
-                colliding = true;
+                //colliding = true;
+            }
+        }
+        for (int j = 0; j < walls.Length; j++)
+        {
+            if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsOBB(walls[j].GetComponent<ObjectBoundingBoxCollisionHull3D>()))
+            {
+                this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                //this.GetComponent<SphereCollisionHull3D>().col.resolveContact();
+            }
+            else
+            {
+                //this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
             }
         }
 
