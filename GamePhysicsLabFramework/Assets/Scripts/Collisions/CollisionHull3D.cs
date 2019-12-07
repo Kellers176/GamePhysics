@@ -37,14 +37,22 @@ public abstract class CollisionHull3D : MonoBehaviour
             // send particle A away in direction of normal at closingVelocity
             if (a.particle.GetMass() == PLAYER_MASS)
             {
-
+                Vector3 desiredDirection = contactHit.normal;
+                Vector3 newVel = desiredDirection.normalized * closingVelocity.magnitude;
+                a.particle.SetVelocity(newVel);
             }
+            resolveInterpenetration(contactHit);
         }
 
         public void resolveContact()
         {
-            //resolveInterpenetration();
-           // resolveCollision();
+            if (contactCount > 0)
+            {
+                for (int i = 0; i < contactCount; i++)
+                {
+                    resolveCollision(contact[i]);
+                }
+            }
         }
 
         public void resolveInterpenetration(Contact contactHit)
@@ -75,7 +83,14 @@ public abstract class CollisionHull3D : MonoBehaviour
                 }
             }
         }
-
+        public void orderContacts()
+        {
+            // If contact exists
+            if (contact != null)
+            {
+                resolveContact();
+            }
+        }
         public void setParticleInfo(Particle3D collision)
         {
             particle = collision;
