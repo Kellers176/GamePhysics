@@ -49,11 +49,12 @@ public class MultipleCollisionMamager : MonoBehaviour
             if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsOBB(walls[j].GetComponent<ObjectBoundingBoxCollisionHull3D>()))
             {
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                Debug.Log("colliding");
                 //this.GetComponent<SphereCollisionHull3D>().col.resolveContact();
             }
             else
             {
-                //this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
             }
         }
 

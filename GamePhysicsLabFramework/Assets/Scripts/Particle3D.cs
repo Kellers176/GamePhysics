@@ -235,7 +235,7 @@ public class Particle3D : MonoBehaviour
         inertia = 0f;
         appliedForce = new Vector3(0, 1, 0);
         forceVar = new Vector3(0.3f, 0.2f, 0.1f);
-
+        position = this.transform.position;
 
 
         //normal = cos(direction), sin(direction)
