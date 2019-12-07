@@ -1371,7 +1371,7 @@ Transform:
   m_GameObject: {fileID: 682009522}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 4.81, y: -0.40999997, z: 4.36}
-  m_LocalScale: {x: 0.19344415, y: 2.1779969, z: 2.082017}
+  m_LocalScale: {x: 0.19344437, y: 2.1779969, z: 2.0820189}
   m_Children: []
   m_Father: {fileID: 1365140748}
   m_RootOrder: 35
@@ -2202,7 +2202,7 @@ GameObject:
   - component: {fileID: 1152534592}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2256,6 +2256,45 @@ MonoBehaviour:
   - {fileID: 1017906775}
   - {fileID: 1960040220}
   startPosition: {fileID: 1195581009}
+  walls:
+  - {fileID: 975481396}
+  - {fileID: 1295047585}
+  - {fileID: 221542085}
+  - {fileID: 219622959}
+  - {fileID: 348261558}
+  - {fileID: 711322383}
+  - {fileID: 1804733140}
+  - {fileID: 1761187662}
+  - {fileID: 1779468953}
+  - {fileID: 1656727921}
+  - {fileID: 1398846366}
+  - {fileID: 1589144777}
+  - {fileID: 229509545}
+  - {fileID: 1254718923}
+  - {fileID: 1772050423}
+  - {fileID: 221153367}
+  - {fileID: 2089194476}
+  - {fileID: 580151359}
+  - {fileID: 1900946522}
+  - {fileID: 302147498}
+  - {fileID: 2121120502}
+  - {fileID: 82612047}
+  - {fileID: 886176318}
+  - {fileID: 1802220742}
+  - {fileID: 1008032194}
+  - {fileID: 1881668857}
+  - {fileID: 1223752121}
+  - {fileID: 1848907062}
+  - {fileID: 2122374081}
+  - {fileID: 1112774715}
+  - {fileID: 1136922082}
+  - {fileID: 440399002}
+  - {fileID: 1707697850}
+  - {fileID: 1290892250}
+  - {fileID: 1848308715}
+  - {fileID: 315722848}
+  - {fileID: 682009522}
+  - {fileID: 949756251}
 --- !u!114 &1152534592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2275,7 +2314,7 @@ MonoBehaviour:
   angularVelocity: {x: 0, y: 0, z: 0}
   angularAcceleration: {x: 0, y: 0, z: 0}
   torque: {x: 0, y: 0, z: 0}
-  startingMass: 5
+  startingMass: 0
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:

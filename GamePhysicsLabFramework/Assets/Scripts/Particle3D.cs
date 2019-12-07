@@ -122,15 +122,15 @@ public class Particle3D : MonoBehaviour
         force.Set(0.0f, 0.0f, 0.0f);
     }
 
-    void SetPositionX(float posX)
+    public void SetPositionX(float posX)
     {
         position.x = posX;
     }
-    void SetPositionY(float posY)
+    public void SetPositionY(float posY)
     {
         position.y = posY;
     }
-    void SetPositionZ(float posZ)
+    public void SetPositionZ(float posZ)
     {
         position.z = posZ;
     }
@@ -246,7 +246,7 @@ public class Particle3D : MonoBehaviour
 
 
         // Apply to transform
-        transform.position = position;
+        //transform.position = position;
  //       particlePosition = transform.position;
         // transform.Rotate(0, 0, rotation);
 
@@ -262,17 +262,21 @@ public class Particle3D : MonoBehaviour
         Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
         Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 
+        //transformMat = calcTransformMat();
+        //RotationMat = QuaternionToMatrix(newRotation);
+        //ScaleMat = calcScaleMat(transform.localScale);
+        //worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
 
         //        inverseInertia = 1 / inertia;
         //        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
         //        RotationMat = QuaternionToMatrix(newRotation);
         //        Debug.Log(newRotation);
-        //        worldTransformationMatrix = new Matrix4x4(
-        //            new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
-        //            new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
-        //            new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
-        //            new Vector4(0,0,0,1)
-        //            );
+                worldTransformationMatrix = new Matrix4x4(
+                    new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
+                    new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
+                    new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
+                    new Vector4(0,0,0,1)
+                    );
         //        applyTorque(forceVar, appliedForce);
         //        transform.rotation = newRotation;
 
