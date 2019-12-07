@@ -29,7 +29,9 @@ public class MultipleCollisionMamager : MonoBehaviour
             {
                 if (circle[i].gameObject.tag == "Death")
                 {
-                    this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
+                    Debug.Log("Colliding");
+                    this.transform.position = startPosition.position;
+                    //this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
                     this.gameObject.GetComponent<Particle3D>().ResetInfo();
 
                 }
