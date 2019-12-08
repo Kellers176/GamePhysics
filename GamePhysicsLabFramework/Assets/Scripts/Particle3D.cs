@@ -145,6 +145,10 @@ public class Particle3D : MonoBehaviour
     {
         velocity = newVel;
     }
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
 
     // Step 1-2
     void updatePositionExplicitEuler(float dt)
@@ -286,21 +290,53 @@ public class Particle3D : MonoBehaviour
         {
             AddForce(new Vector3(100, 0, 0));
             currentForceVals += new Vector3(100, 0, 0);
+            if (this.gameObject.name == "Player")
+            {
+                if (this.gameObject.GetComponent<SphereCollisionHull3D>().col.collisionStatus)
+                {
+                    SetPositionX(position.x + 0.01f);
+                    this.gameObject.GetComponent<SphereCollisionHull3D>().col.setCollisionStatus(false);
+                }
+            }
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             AddForce(new Vector3(0, 0, -100));
             currentForceVals += new Vector3(0, 0, -100);
+            if (this.gameObject.name == "Player")
+            {
+                if (this.gameObject.GetComponent<SphereCollisionHull3D>().col.collisionStatus)
+                {
+                    SetPositionZ(position.z - 0.01f);
+                    this.gameObject.GetComponent<SphereCollisionHull3D>().col.setCollisionStatus(false);
+                }
+            }
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             AddForce(new Vector3(0, 0, 100));
             currentForceVals += new Vector3(0, 0, 100);
+            if (this.gameObject.name == "Player")
+            {
+                if (this.gameObject.GetComponent<SphereCollisionHull3D>().col.collisionStatus)
+                {
+                    SetPositionZ(position.z + 0.01f);
+                    this.gameObject.GetComponent<SphereCollisionHull3D>().col.setCollisionStatus(false);
+                }
+            }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             AddForce(new Vector3(-100, 0, 0));
             currentForceVals += new Vector3(-100, 0, 0);
+            if (this.gameObject.name == "Player")
+            {
+                if (this.gameObject.GetComponent<SphereCollisionHull3D>().col.collisionStatus)
+                {
+                    SetPositionX(position.x - 0.01f);
+                    this.gameObject.GetComponent<SphereCollisionHull3D>().col.setCollisionStatus(false);
+                }
+            }
         }
 
 
