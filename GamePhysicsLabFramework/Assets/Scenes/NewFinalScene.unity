@@ -868,6 +868,7 @@ MonoBehaviour:
   startingMass: 5
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
+  currentForceVals: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:
     e00: 0
     e01: 0
@@ -935,11 +936,14 @@ MonoBehaviour:
   startPosition: {fileID: 137386581}
   Box: {fileID: 1269975021}
   walls:
-  - {fileID: 2040057987}
+  - {fileID: 679016865}
   - {fileID: 70472253}
   - {fileID: 94634962}
   - {fileID: 241010684}
   - {fileID: 376190693}
+  - {fileID: 2119912011}
+  - {fileID: 889374922}
+  - {fileID: 2040057987}
 --- !u!135 &666880108
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2059,6 +2063,7 @@ MonoBehaviour:
   startingMass: 0
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
+  currentForceVals: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:
     e00: 0
     e01: 0
@@ -2136,6 +2141,7 @@ MonoBehaviour:
   startingMass: 0
   appliedForce: {x: 0, y: 0, z: 0}
   forceVar: {x: 0, y: 0, z: 0}
+  currentForceVals: {x: 0, y: 0, z: 0}
   worldTransformationMatrix:
     e00: 0
     e01: 0

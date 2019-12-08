@@ -20,6 +20,7 @@ public class Particle3D : MonoBehaviour
     float inverseInertia;
     public Vector3 appliedForce;
     public Vector3 forceVar;
+    public Vector3 currentForceVals = Vector3.zero;
 
     public Matrix4x4 worldTransformationMatrix;
     Matrix4x4 invWorldTransformationMatrix;
@@ -278,18 +279,22 @@ public class Particle3D : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             AddForce(new Vector3(100, 0, 0));
+            currentForceVals += new Vector3(100, 0, 0);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             AddForce(new Vector3(0, 0, -100));
+            currentForceVals += new Vector3(0, 0, -100);
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             AddForce(new Vector3(0, 0, 100));
+            currentForceVals += new Vector3(0, 0, 100);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             AddForce(new Vector3(-100, 0, 0));
+            currentForceVals += new Vector3(-100, 0, 0);
         }
 
         // Step 2-2

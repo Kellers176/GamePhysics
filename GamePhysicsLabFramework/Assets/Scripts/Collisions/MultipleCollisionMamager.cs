@@ -55,7 +55,6 @@ public class MultipleCollisionMamager : MonoBehaviour
                  this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                  Debug.Log("colliding");
                  this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
-                
             }
             else
             {
