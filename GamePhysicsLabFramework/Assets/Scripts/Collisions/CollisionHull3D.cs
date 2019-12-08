@@ -38,13 +38,9 @@ public abstract class CollisionHull3D : MonoBehaviour
         {
             //stuff
             Vector3 relativeVelocity = a.particle.velocity;
-            if (b)
-            {
-                relativeVelocity -= b.particle.velocity;
+            
 
-            }
-
-            return new Vector3(relativeVelocity.x * contactHit.normal.x, relativeVelocity.y * contactHit.normal.y, relativeVelocity.z * contactHit.normal.z);
+            return new Vector3(relativeVelocity.x * contact[0].normal.x, relativeVelocity.y * contact[0].normal.y, relativeVelocity.z * contact[0].normal.z);
         }
 
         public void resolveVelocity(Contact contactHit)
@@ -60,16 +56,13 @@ public abstract class CollisionHull3D : MonoBehaviour
 
             //accelerationnnn
             Vector3 accCausedVelocity = a.particle.acceleration;
-            if(b)
-            {
-                accCausedVelocity -= b.particle.acceleration;
-            }
+            
 
-            Vector3 accCausedSepVelocity = new Vector3(accCausedVelocity.x * contactHit.normal.x, accCausedVelocity.y * contactHit.normal.y, accCausedVelocity.z * contactHit.normal.z) * Time.deltaTime;
+            Vector3 accCausedSepVelocity = new Vector3(accCausedVelocity.x * contact[0].normal.x, accCausedVelocity.y * contact[0].normal.y, accCausedVelocity.z * contact[0].normal.z) * Time.deltaTime;
 
             if(accCausedSepVelocity.x < 0 && accCausedSepVelocity.y < 0 && accCausedSepVelocity.z < 0)
             {
-                newSepVelocity += contactHit.restitution * accCausedSepVelocity;
+                newSepVelocity += contact[0].restitution * accCausedSepVelocity;
 
                 if (newSepVelocity.x < 0 && newSepVelocity.y < 0&& newSepVelocity.z < 0)
                     newSepVelocity = Vector3.zero;
@@ -79,10 +72,7 @@ public abstract class CollisionHull3D : MonoBehaviour
             Vector3 deltaVelocity = newSepVelocity - seperatingVelocity;
             float totalInverseMass = a.particle.GetInvMass();
 
-            if (b)
-            {
-                totalInverseMass += a.particle.GetInvMass();
-            }
+           
             if (totalInverseMass <= 0)
             {
                 return;
@@ -90,14 +80,10 @@ public abstract class CollisionHull3D : MonoBehaviour
 
             Vector3 impulse = deltaVelocity / totalInverseMass;
 
-            Vector3 impulsePerIMass = new Vector3(contactHit.normal.x * impulse.x, contactHit.normal.y * impulse.y, contactHit.normal.z * impulse.z);
+            Vector3 impulsePerIMass = new Vector3(contact[0].normal.x * impulse.x, contact[0].normal.y * impulse.y, contact[0].normal.z * impulse.z);
 
             a.particle.SetVelocity(a.particle.velocity + impulsePerIMass * a.particle.GetInvMass());
 
-            if (b)
-            {
-                b.particle.SetVelocity(b.particle.velocity + impulsePerIMass * -b.particle.GetInvMass());
-            }
 
         }
 
@@ -126,7 +112,7 @@ public abstract class CollisionHull3D : MonoBehaviour
                 return;
             }
 
-            Vector3 movePerIMass = contactHit.normal * (-contact[0].penetration / totalInverseMass);
+            Vector3 movePerIMass = contact[0].normal * (-contact[0].penetration / totalInverseMass);
 
             a.particle.SetPosition(a.particle.position + movePerIMass * a.particle.GetInvMass());
 

@@ -31,7 +31,6 @@ public class SphereCollisionHull3D : CollisionHull3D
 
         Vector3 difference = collisionCenter - currentCenter;
 
-        //I am confused
         float distanceSquared = Vector3.SqrMagnitude(difference);
 
         float sumOfRadii = other.radius + this.radius;
@@ -73,6 +72,13 @@ public class SphereCollisionHull3D : CollisionHull3D
         // 5. max0 >= radius
         // 6. radius >= min0
         //done
+        Vector3 collisionCenter = other.transform.position;
+        Vector3 currentCenter = this.transform.position;
+
+        Vector3 difference = collisionCenter - currentCenter;
+
+        float distanceSquared = Vector3.SqrMagnitude(difference);
+
         float radius = this.radius;
 
         float minY = other.transform.position.y - (other.transform.localScale.y * 0.5f);
@@ -88,10 +94,28 @@ public class SphereCollisionHull3D : CollisionHull3D
         float nearestY = Mathf.Clamp(this.transform.position.y, minY, maxY);
         float nearestZ = Mathf.Clamp(this.transform.position.z, minZ, maxZ);
 
+        Vector3 newVector = new Vector3(nearestX, nearestY, nearestZ);
+
 
         //check whether point is within circle
         if (TestPoint(radius, nearestX, nearestY, nearestZ, this.transform.position))
         {
+            col.a = this;
+            col.b = other;
+
+            float theta = Mathf.Atan2(difference.y, difference.x);
+            Vector3 centerPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+            //float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
+            col.contact[0].normal = centerPosition - newVector;
+            col.contact[0].normal.Normalize();
+            col.contact[0].penetration = col.contact[0].normal.magnitude;
+            col.contact[0].point = this.transform.position + (col.contact[0].normal.normalized * radius);
+            
+            col.contact[0].restitution = 0.01f;
+
+
+
             return true;
         }
 
