@@ -44,6 +44,11 @@ public class Particle3D : MonoBehaviour
         return mass;
     }
 
+    public float GetInvMass()
+    {
+        return massInv;
+    }
+
     public Quaternion multiplyQuatByScalar(float i, Quaternion quat)
     {
         Quaternion temp = new Quaternion(quat.w * i, quat.x * i, quat.y * i, quat.z * i);
