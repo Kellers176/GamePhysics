@@ -263,6 +263,7 @@ public class Particle3D : MonoBehaviour
         // Step 2-2
         UpdateAcceleration();
 
+ //       AddForce(new Vector3(10, 0, 0));
 
         // Apply to transform
          transform.position = position;
@@ -274,31 +275,32 @@ public class Particle3D : MonoBehaviour
         // acceleration.x = -Mathf.Sin(Time.fixedTime);
         // angularAcceleration = -Mathf.Sin(Time.fixedTime);
 
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            AddForce(new Vector3(100, 0, 0));
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            AddForce(new Vector3(0, 0, -100));
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            AddForce(new Vector3(0, 0, 100));
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            AddForce(new Vector3(-100, 0, 0));
+        }
+
         // Step 2-2
         // f_gravity: f = mg
-       Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
+        Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
        AddForce(f_gravity);
        Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
        Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 
-        //transformMat = calcTransformMat();
-        //RotationMat = QuaternionToMatrix(newRotation);
-        //ScaleMat = calcScaleMat(transform.localScale);
-        //worldTransformationMatrix = transformMat * RotationMat * ScaleMat;
 
-        //        inverseInertia = 1 / inertia;
-        //        SetITSolidBox(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
-        //        RotationMat = QuaternionToMatrix(newRotation);
-        //        Debug.Log(newRotation);
-                worldTransformationMatrix = new Matrix4x4(
-                    new Vector4(RotationMat.m00, RotationMat.m01, RotationMat.m02, position.x),
-                    new Vector4(RotationMat.m10, RotationMat.m11, RotationMat.m12, position.y),
-                    new Vector4(RotationMat.m20, RotationMat.m21, RotationMat.m22, position.z),
-                    new Vector4(0,0,0,1)
-                    );
-        //        applyTorque(forceVar, appliedForce);
-        //        transform.rotation = newRotation;
-
+        
     }
 
 

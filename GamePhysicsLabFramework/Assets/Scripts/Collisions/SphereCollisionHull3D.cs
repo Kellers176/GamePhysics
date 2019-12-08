@@ -106,11 +106,11 @@ public class SphereCollisionHull3D : CollisionHull3D
             float theta = Mathf.Atan2(difference.y, difference.x);
             Vector3 centerPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
-            //float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
-            col.contact[0].normal = centerPosition - newVector;
+            //float distanceContact = other.transform.position 
+            col.contact[0].normal = currentCenter - newVector;
+            col.contact[0].penetration = col.contact[0].normal.magnitude - 5;
             col.contact[0].normal.Normalize();
-            col.contact[0].penetration = col.contact[0].normal.magnitude;
-            col.contact[0].point = this.transform.position + (col.contact[0].normal.normalized * radius);
+            col.contact[0].point = newVector + (col.contact[0].normal.normalized * radius);
             
             col.contact[0].restitution = 0.01f;
 

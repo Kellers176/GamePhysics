@@ -8,7 +8,8 @@ public class AxisAlignedBoundingBoxCollisionHull3D : CollisionHull3D
     // Start is called before the first frame update
     void Start()
     {
-
+        col = new Collision();
+        particle = GetComponent<Particle3D>();
     }
 
     // Update is called once per frame

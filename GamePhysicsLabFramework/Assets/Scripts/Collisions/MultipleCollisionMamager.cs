@@ -31,7 +31,7 @@ public class MultipleCollisionMamager : MonoBehaviour
                 {
                     Debug.Log("Colliding");
                     this.transform.position = startPosition.position;
-                    //this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
+                    this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
                     this.gameObject.GetComponent<Particle3D>().ResetInfo();
 
                 }
@@ -43,6 +43,7 @@ public class MultipleCollisionMamager : MonoBehaviour
             if (Box.gameObject.tag == "Death")
             {
                 Debug.Log("DEATHHHH");
+                this.transform.position = startPosition.position;
                 this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
                 this.gameObject.GetComponent<Particle3D>().ResetInfo();
             }
@@ -53,7 +54,7 @@ public class MultipleCollisionMamager : MonoBehaviour
             {
                  this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                  Debug.Log("colliding");
-//                 this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
+                 this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
                 
             }
             else

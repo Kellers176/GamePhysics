@@ -104,7 +104,7 @@ public abstract class CollisionHull3D : MonoBehaviour
 
             if(b)
             {
-                totalInverseMass += b.particle.GetInvMass();
+               totalInverseMass += b.particle.GetInvMass();
             }
 
             if(totalInverseMass <= 0)
@@ -118,7 +118,7 @@ public abstract class CollisionHull3D : MonoBehaviour
 
             if(b)
             {
-                b.particle.SetPosition(b.particle.position + movePerIMass * b.particle.GetInvMass());
+                //b.particle.SetPosition(b.particle.position + movePerIMass * b.particle.GetInvMass());
             }
 
         }
