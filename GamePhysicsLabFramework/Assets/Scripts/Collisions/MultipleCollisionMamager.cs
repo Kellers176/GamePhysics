@@ -35,6 +35,7 @@ public class MultipleCollisionMamager : MonoBehaviour
                     this.gameObject.GetComponent<Particle3D>().ResetInfo();
 
                 }
+                this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
             }
         }
         if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsAABB(Box.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
@@ -50,12 +51,10 @@ public class MultipleCollisionMamager : MonoBehaviour
         {
             if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsAABB(walls[j].GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
             {
-                if(walls[j].tag == "Wall")
-                {
-                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-                    Debug.Log("colliding");
-                    this.GetComponent<SphereCollisionHull3D>().col.orderContacts();
-                }
+                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                 Debug.Log("colliding");
+//                 this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
+                
             }
             else
             {
@@ -63,16 +62,6 @@ public class MultipleCollisionMamager : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
             }
         }
-
-        //for (int i = 0; i < circle.Length; i++)
-        //{
-        //    tempCollision = circle[i].GetComponent<SphereCollisionHull3D>().col;
-        //    if (colliding)
-        //    {
-        //        circle[i].GetComponent<SphereCollisionHull3D>().col.orderContacts();
-        //    }
-        //    colliding = false;
-        //}
 
     }
 

@@ -11,7 +11,11 @@ public class SphereCollisionHull3D : CollisionHull3D
     [Range(0.0f, 100.0f)]
     public float radius;
 
-
+    private void Start()
+    {
+        col = new Collision();
+        particle = GetComponent<Particle3D>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -36,6 +40,22 @@ public class SphereCollisionHull3D : CollisionHull3D
 
         if (distanceSquared <= sumSquared)
         {
+            col.a = this;
+            col.b = other;
+
+            float theta = Mathf.Atan2(difference.y, difference.x);
+            Vector3 centerPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+            float distanceContact = ((distanceSquared * distanceSquared) - (other.radius * other.radius) + (radius * radius) / (2 * distanceSquared));
+            col.contact[0].penetration = radius - distanceContact;
+            col.contact[0].point = new Vector3((centerPosition.x + Mathf.Cos(theta) * distanceContact), (centerPosition.y + Mathf.Sin(theta) * distanceContact), (centerPosition.z + Mathf.Cos(theta) * distanceContact));
+            col.contact[0].normal = centerPosition - col.contact[0].point;
+            col.contact[0].normal.Normalize();
+            col.contact[0].restitution = 0.01f;
+
+
+
+
             return true;
         }
 
@@ -166,6 +186,10 @@ public class SphereCollisionHull3D : CollisionHull3D
         //check whether point is within circle
         if (TestPoint(radius, nearestX, nearestY, nearestZ, position))
         {
+           
+
+
+
             return true;
         }
         return false;

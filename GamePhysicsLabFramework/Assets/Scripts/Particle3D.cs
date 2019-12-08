@@ -255,7 +255,7 @@ public class Particle3D : MonoBehaviour
     void FixedUpdate()
     {
 
- //       updatePositionExplicitEuler(Time.fixedDeltaTime);
+        updatePositionExplicitEuler(Time.fixedDeltaTime);
         //updatePositionKinematic(Time.fixedDeltaTime);
         //updateRotationEulerExplicit(Time.fixedDeltaTime);
         //updateRotationKinematic(Time.fixedDeltaTime);
@@ -265,7 +265,7 @@ public class Particle3D : MonoBehaviour
 
 
         // Apply to transform
- //        transform.position = position;
+         transform.position = position;
  //       particlePosition = transform.position;
         // transform.Rotate(0, 0, rotation);
 
@@ -276,10 +276,10 @@ public class Particle3D : MonoBehaviour
 
         // Step 2-2
         // f_gravity: f = mg
- //       Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
- //       AddForce(f_gravity);
- //       Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
- //       Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
+       Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
+       AddForce(f_gravity);
+       Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+       Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 
         //transformMat = calcTransformMat();
         //RotationMat = QuaternionToMatrix(newRotation);
