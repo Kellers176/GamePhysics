@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class MultipleCollisionMamager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -12,7 +12,7 @@ public class MultipleCollisionMamager : MonoBehaviour
     //public GameObject AABB;
     //public GameObject OBB;
     //bool colliding = false;
-
+    public GameManagerScript manager;
 
     void Start()
     {
@@ -30,10 +30,15 @@ public class MultipleCollisionMamager : MonoBehaviour
                 if (circle[i].gameObject.tag == "Death")
                 {
                     Debug.Log("Colliding");
+                    manager.PlayerHealth--;
                     this.transform.position = startPosition.position;
                     this.gameObject.GetComponent<Particle3D>().SetPosition(startPosition.position);
                     this.gameObject.GetComponent<Particle3D>().ResetInfo();
 
+                }
+                if(circle[i].gameObject.tag == "Hole")
+                {
+                    SceneManager.LoadScene("YouWinScene");
                 }
                 this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
             }

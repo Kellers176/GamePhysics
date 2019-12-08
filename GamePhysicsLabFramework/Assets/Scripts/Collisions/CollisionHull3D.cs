@@ -65,7 +65,7 @@ public abstract class CollisionHull3D : MonoBehaviour
                 newSepVelocity += contact[0].restitution * accCausedSepVelocity;
 
                 if (newSepVelocity.x < 0 && newSepVelocity.y < 0&& newSepVelocity.z < 0)
-                    newSepVelocity = Vector3.zero;
+                   newSepVelocity = Vector3.zero;
 
             }
 

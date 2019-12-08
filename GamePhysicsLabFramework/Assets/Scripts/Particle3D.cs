@@ -204,8 +204,8 @@ public class Particle3D : MonoBehaviour
     }
     public void ResetInfo()
     {
-        acceleration = Vector3.zero;
-        velocity = Vector3.zero;
+        //acceleration = Vector3.zero;
+       // velocity = Vector3.zero;
     }
     void updateAngularAcceleration()
     {
@@ -275,6 +275,12 @@ public class Particle3D : MonoBehaviour
         // test
         // acceleration.x = -Mathf.Sin(Time.fixedTime);
         // angularAcceleration = -Mathf.Sin(Time.fixedTime);
+        // Step 2-2
+        // f_gravity: f = mg
+        Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
+       AddForce(f_gravity);
+       Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+       Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -297,12 +303,6 @@ public class Particle3D : MonoBehaviour
             currentForceVals += new Vector3(-100, 0, 0);
         }
 
-        // Step 2-2
-        // f_gravity: f = mg
-        Vector3 f_gravity = mass * new Vector3(0.0f, -9.8f, 0.0f);
-       AddForce(f_gravity);
-       Vector3 gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
-       Vector3 normal = ForceGenerator.GenerateForce_Normal(gravity, vectorReflect);
 
 
         
