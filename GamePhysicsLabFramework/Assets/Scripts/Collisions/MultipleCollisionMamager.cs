@@ -48,15 +48,19 @@ public class MultipleCollisionMamager : MonoBehaviour
         }
         for (int j = 0; j < walls.Length; j++)
         {
-            if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsOBB(walls[j].GetComponent<ObjectBoundingBoxCollisionHull3D>()))
+            if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsAABB(walls[j].GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
             {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-                Debug.Log("colliding");
-                this.GetComponent<SphereCollisionHull3D>().col.orderContacts();
+                if(walls[j].tag == "Wall")
+                {
+                    this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                    Debug.Log("colliding");
+                    this.GetComponent<SphereCollisionHull3D>().col.orderContacts();
+                }
             }
             else
             {
-                this.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                Debug.Log("Not colliding");
+                this.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
             }
         }
 

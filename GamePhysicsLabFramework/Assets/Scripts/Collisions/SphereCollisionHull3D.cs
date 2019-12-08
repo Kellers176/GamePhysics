@@ -157,7 +157,7 @@ public class SphereCollisionHull3D : CollisionHull3D
         Vector3 position;
 
 
-        position = other.transform.worldToLocalMatrix.MultiplyVector(this.transform.position);
+        position = other.transform.worldToLocalMatrix.inverse.MultiplyVector(other.transform.position - this.transform.position);
 
         float nearestX = Mathf.Clamp(position.x, minX, maxX);
         float nearestY = Mathf.Clamp(position.y, minY, maxY);
