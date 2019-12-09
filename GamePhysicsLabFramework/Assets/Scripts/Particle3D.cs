@@ -288,8 +288,8 @@ public class Particle3D : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            AddForce(new Vector3(100, 0, 0));
-            currentForceVals += new Vector3(100, 0, 0);
+            AddForce(new Vector3(200, 0, 0));
+            currentForceVals += new Vector3(300, 0, 0);
             if (this.gameObject.name == "Player")
             {
                 if (this.gameObject.GetComponent<SphereCollisionHull3D>().col.collisionStatus)
@@ -301,7 +301,7 @@ public class Particle3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            AddForce(new Vector3(0, 0, -100));
+            AddForce(new Vector3(0, 0, -200));
             currentForceVals += new Vector3(0, 0, -100);
             if (this.gameObject.name == "Player")
             {
@@ -314,7 +314,7 @@ public class Particle3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            AddForce(new Vector3(0, 0, 100));
+            AddForce(new Vector3(0, 0, 200));
             currentForceVals += new Vector3(0, 0, 100);
             if (this.gameObject.name == "Player")
             {
@@ -327,7 +327,7 @@ public class Particle3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            AddForce(new Vector3(-100, 0, 0));
+            AddForce(new Vector3(-200, 0, 0));
             currentForceVals += new Vector3(-100, 0, 0);
             if (this.gameObject.name == "Player")
             {
