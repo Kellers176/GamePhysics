@@ -1102,7 +1102,7 @@ MonoBehaviour:
   - {fileID: 376190693}
   - {fileID: 2119912011}
   - {fileID: 889374922}
-  - {fileID: 2040057987}
+  floor: {fileID: 2040057987}
   manager: {fileID: 579566743}
 --- !u!135 &666880108
 SphereCollider:

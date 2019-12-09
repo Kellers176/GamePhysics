@@ -9,6 +9,7 @@ public class MultipleCollisionMamager : MonoBehaviour
     public Transform startPosition;
     public GameObject Box;
     public GameObject[] walls;
+    public GameObject floor;
     //public GameObject AABB;
     //public GameObject OBB;
     //bool colliding = false;
@@ -60,6 +61,7 @@ public class MultipleCollisionMamager : MonoBehaviour
                  this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                  Debug.Log("colliding");
                  this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
+                  this.GetComponent<SphereCollisionHull3D>().col.setCollisionStatus(true);
             }
             else
             {
@@ -67,7 +69,12 @@ public class MultipleCollisionMamager : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
             }
         }
-
+        if (this.GetComponent<SphereCollisionHull3D>().TestCollisionVsAABB(floor.GetComponent<AxisAlignedBoundingBoxCollisionHull3D>()))
+        {
+            this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            Debug.Log("colliding");
+            this.GetComponent<SphereCollisionHull3D>().col.resolveContacts();
+        }
     }
 
 

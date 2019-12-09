@@ -31,8 +31,11 @@ public abstract class CollisionHull3D : MonoBehaviour
         float iterations = 3;
         float iterationsUsed = 0;
 
-        
 
+        public void setCollisionStatus(bool colStatus)
+        {
+            collisionStatus = colStatus;
+        }
 
         public Vector3 calculateSeperatingVelocity(Contact contactHit)
         {
